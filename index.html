@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>R Cheatsheet — BrewStudy HSWT</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #080808; color: #ddd; font-family: 'Courier New', Courier, monospace; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #111; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    input::placeholder { color: #555; }
+    button:focus { outline: none; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const SECTIONS = [
+      { id: "tastatur",  label: "⌨️ Tastatur",   color: "#E8C547" },
+      { id: "basics",    label: "🧱 Basics",      color: "#5BC4A0" },
+      { id: "daten",     label: "📦 Daten",       color: "#5BA8D4" },
+      { id: "funktionen",label: "🔢 Funktionen",  color: "#D4835B" },
+      { id: "kontrolle", label: "🔁 Steuerung",   color: "#A87FC4" },
+      { id: "ggplot",    label: "📊 ggplot2",     color: "#E87A7A" },
+      { id: "tests",     label: "⚗️ Tests",       color: "#7AB87A" },
+      { id: "shortcuts", label: "🚀 Shortcuts",   color: "#F0A050" },
+    ];
+
+    const data = {
+      tastatur: {
+        title: "Sonderzeichen auf deiner deutschen Tastatur (HP OmniBook)",
+        subtitle: "AltGr = rechte Alt-Taste · Shift = linke oder rechte Hochstelltaste",
+        gruppen: [
+          {
+            name: "Für R unverzichtbar", farbe: "#E8C547",
+            items: [
+              { zeichen: "<-",   wie: "Alt (links) + Bindestrich  ODER  < dann -",  was: "Zuweisungspfeil (wichtigster Operator!)" },
+              { zeichen: "<",    wie: "Taste neben K (ohne Shift)",                  was: "Kleiner als" },
+              { zeichen: ">",    wie: "Shift + Taste neben K",                       was: "Größer als" },
+              { zeichen: "#",    wie: "Taste oben rechts (neben *)",                 was: "Kommentar — alles danach wird ignoriert" },
+              { zeichen: "$",    wie: "Shift + 4",                                   was: "Spalten-Zugriff: df$spalte" },
+              { zeichen: "_",    wie: "Shift + Bindestrich",                         was: "Unterstrich (Variablennamen)" },
+              { zeichen: "~",    wie: "AltGr + +",                                   was: "Tilde (für Formeln: y ~ x)" },
+              { zeichen: "|",    wie: "AltGr + Taste neben Y (links)",               was: "Oder-Operator / Pipe" },
+              { zeichen: "%>%",  wie: "Strg + Shift + M (in RStudio)",               was: "Pipe-Operator (tidyverse)" },
+              { zeichen: "==",   wie: "Shift + 0, dann nochmal",                     was: "Gleichheits-Vergleich (NICHT =)" },
+            ]
+          },
+          {
+            name: "Klammern", farbe: "#5BC4A0",
+            items: [
+              { zeichen: "(",  wie: "Shift + 8",   was: "Runde Klammer auf — für Funktionen" },
+              { zeichen: ")",  wie: "Shift + 9",   was: "Runde Klammer zu" },
+              { zeichen: "[",  wie: "AltGr + 8",   was: "Eckige Klammer auf — für Indexierung" },
+              { zeichen: "]",  wie: "AltGr + 9",   was: "Eckige Klammer zu" },
+              { zeichen: "{",  wie: "AltGr + 7",   was: "Geschweifte Klammer auf — für Blöcke" },
+              { zeichen: "}",  wie: "AltGr + 0",   was: "Geschweifte Klammer zu" },
+            ]
+          },
+          {
+            name: "Weitere Sonderzeichen", farbe: "#5BA8D4",
+            items: [
+              { zeichen: "@",  wie: "AltGr + Q",           was: "Selten in R gebraucht" },
+              { zeichen: "\\", wie: "AltGr + ß",            was: "Backslash (in Dateipfaden!)" },
+              { zeichen: "/",  wie: "Shift + 7",            was: "Schrägstrich (Dateipfade, Division)" },
+              { zeichen: '"',  wie: "Shift + 2",            was: "Anführungszeichen (für Text/Strings)" },
+              { zeichen: "'",  wie: "Shift + #",            was: "Einfaches Anführungszeichen" },
+              { zeichen: ":",  wie: "Shift + .",             was: "Doppelpunkt (Sequenz: 1:10)" },
+              { zeichen: "!",  wie: "Shift + 1",            was: "Nicht-Operator: != oder !TRUE" },
+              { zeichen: "&",  wie: "Shift + 6",            was: "Und-Operator" },
+              { zeichen: "^",  wie: "Taste oben links (^)", was: "Potenz: 2^3 = 8" },
+            ]
+          }
+        ]
+      },
+      basics: {
+        title: "R Grundlagen — Die Bausteine",
+        subtitle: "Alles fängt hier an. Diese Konzepte brauchst du täglich.",
+        gruppen: [
+          {
+            name: "Zuweisungen & Variablen", farbe: "#5BC4A0",
+            items: [
+              { zeichen: "x <- 5",         was: "Weise der Variable x den Wert 5 zu" },
+              { zeichen: "x = 5",          was: "Geht auch, aber <- ist Standard in R" },
+              { zeichen: "x",              was: "Ausgabe von x in der Console" },
+              { zeichen: "print(x)",       was: "Explizite Ausgabe" },
+              { zeichen: "rm(x)",          was: "Variable löschen" },
+              { zeichen: "ls()",           was: "Alle Variablen im Environment anzeigen" },
+              { zeichen: "rm(list=ls())",  was: "⚠️ ALLES im Environment löschen" },
+            ]
+          },
+          {
+            name: "Datentypen", farbe: "#E8C547",
+            items: [
+              { zeichen: "42",               was: "numeric (Zahl)" },
+              { zeichen: "3.14",             was: "numeric (Dezimalzahl)" },
+              { zeichen: '"Helles"',         was: 'character (Text/String — immer in Anführungszeichen!)' },
+              { zeichen: "TRUE / FALSE",     was: "logical (Wahrheitswert)" },
+              { zeichen: "NA",               was: "Not Available (fehlender Wert)" },
+              { zeichen: "NULL",             was: "Leeres Objekt" },
+              { zeichen: "class(x)",         was: "Welchen Typ hat x?" },
+              { zeichen: "is.numeric(x)",    was: "Ist x eine Zahl? → TRUE/FALSE" },
+              { zeichen: "as.numeric(x)",    was: "Umwandlung in Zahl" },
+              { zeichen: "as.character(x)",  was: "Umwandlung in Text" },
+              { zeichen: "as.factor(x)",     was: "Umwandlung in Faktor (Kategorien)" },
+            ]
+          },
+          {
+            name: "Operatoren", farbe: "#D4835B",
+            items: [
+              { zeichen: "+ - * /",        was: "Grundrechenarten" },
+              { zeichen: "^",              was: "Potenz: 2^3 = 8" },
+              { zeichen: "%%",             was: "Modulo (Rest): 10 %% 3 = 1" },
+              { zeichen: "%/%",            was: "Ganzzahldivision: 10 %/% 3 = 3" },
+              { zeichen: "== != < > <= >=",was: "Vergleiche → geben TRUE/FALSE zurück" },
+              { zeichen: "& und &&",       was: "UND (& vektorweise, && einzeln)" },
+              { zeichen: "| und ||",       was: "ODER (| vektorweise, || einzeln)" },
+              { zeichen: "!",              was: "NICHT: !TRUE = FALSE" },
+              { zeichen: "%in%",           was: "Ist enthalten: 'IPA' %in% bier_name" },
+            ]
+          }
+        ]
+      },
+      daten: {
+        title: "Datenstrukturen & Data Frames",
+        subtitle: "Wie R Daten speichert — das Herzstück.",
+        gruppen: [
+          {
+            name: "Vektor — 1D Daten", farbe: "#5BA8D4",
+            items: [
+              { zeichen: "c(1, 2, 3)",         was: "Vektor erstellen (c = combine)" },
+              { zeichen: "1:10",               was: "Sequenz von 1 bis 10" },
+              { zeichen: "seq(1, 10, by=2)",   was: "Sequenz mit Schrittweite: 1,3,5,7,9" },
+              { zeichen: "rep(5, times=3)",    was: "Wiederholung: 5 5 5" },
+              { zeichen: "rep(c(1,2), each=3)",was: "1 1 1 2 2 2" },
+              { zeichen: "x[3]",               was: "3. Element von Vektor x" },
+              { zeichen: "x[2:5]",             was: "Elemente 2 bis 5" },
+              { zeichen: "x[-1]",              was: "Alles AUSSER dem 1. Element" },
+              { zeichen: "x[x > 10]",          was: "Alle Elemente größer als 10" },
+              { zeichen: "length(x)",          was: "Anzahl der Elemente" },
+              { zeichen: "names(x)",           was: "Namen der Elemente setzen/anzeigen" },
+            ]
+          },
+          {
+            name: "Data Frame — Tabelle", farbe: "#5BC4A0",
+            items: [
+              { zeichen: "data.frame(a=c(1,2), b=c('x','y'))", was: "Data Frame erstellen" },
+              { zeichen: "df$spalte",          was: "Eine Spalte auswählen" },
+              { zeichen: "df[1, ]",            was: "Erste Zeile" },
+              { zeichen: "df[ ,2]",            was: "Zweite Spalte" },
+              { zeichen: "df[1, 2]",           was: "Zeile 1, Spalte 2" },
+              { zeichen: "df[df$x > 5, ]",     was: "Filtern: Zeilen wo x > 5" },
+              { zeichen: "nrow(df) / ncol(df)",was: "Anzahl Zeilen / Spalten" },
+              { zeichen: "dim(df)",            was: "Dimensionen: c(Zeilen, Spalten)" },
+              { zeichen: "str(df)",            was: "Struktur anzeigen (IMMER zuerst!)" },
+              { zeichen: "summary(df)",        was: "Statistische Zusammenfassung" },
+              { zeichen: "head(df) / tail(df)",was: "Erste / letzte 6 Zeilen" },
+              { zeichen: "colnames(df)",       was: "Spaltennamen" },
+              { zeichen: "df$neu <- wert",     was: "Neue Spalte hinzufügen" },
+              { zeichen: "df$spalte <- NULL",  was: "Spalte löschen" },
+            ]
+          },
+          {
+            name: "Daten einlesen & speichern", farbe: "#A87FC4",
+            items: [
+              { zeichen: 'read.csv("datei.csv")',          was: "CSV einlesen (Komma-getrennt)" },
+              { zeichen: 'read.csv2("datei.csv")',         was: "CSV einlesen (Semikolon-getrennt — Standard in DE!)" },
+              { zeichen: 'read.csv("datei.csv", sep=";")', was: "Trennzeichen selbst festlegen" },
+              { zeichen: 'read.csv("datei.csv", dec=",")', was: "Komma als Dezimalzeichen (Deutschland!)" },
+              { zeichen: "library(readxl)",               was: "Paket für Excel-Dateien laden" },
+              { zeichen: 'read_excel("datei.xlsx")',       was: "Excel-Datei einlesen" },
+              { zeichen: 'write.csv(df, "output.csv")',    was: "Als CSV speichern" },
+              { zeichen: "getwd()",                        was: "Aktuelles Arbeitsverzeichnis anzeigen" },
+              { zeichen: 'setwd("C:/Mein/Ordner")',        was: "Arbeitsverzeichnis setzen" },
+            ]
+          },
+          {
+            name: "Fehlende Werte (NA)", farbe: "#E87A7A",
+            items: [
+              { zeichen: "is.na(x)",               was: "Welche Werte sind NA?" },
+              { zeichen: "sum(is.na(df))",          was: "Wie viele NAs insgesamt?" },
+              { zeichen: "na.omit(df)",             was: "Alle Zeilen mit NA entfernen" },
+              { zeichen: "mean(x, na.rm=TRUE)",     was: "Mittelwert OHNE NAs berechnen" },
+              { zeichen: "df[!is.na(df$spalte), ]", was: "Nur Zeilen ohne NA in einer Spalte" },
+            ]
+          }
+        ]
+      },
+      funktionen: {
+        title: "Statistische Funktionen",
+        subtitle: "Das Werkzeug für die Prüfung — alle auswendig lernen!",
+        gruppen: [
+          {
+            name: "Lage & Streuung", farbe: "#D4835B",
+            items: [
+              { zeichen: "mean(x)",              was: "Arithmetischer Mittelwert" },
+              { zeichen: "median(x)",            was: "Median (mittlerer Wert)" },
+              { zeichen: "sd(x)",                was: "Standardabweichung (s)" },
+              { zeichen: "var(x)",               was: "Varianz (s²)" },
+              { zeichen: "range(x)",             was: "Minimum und Maximum" },
+              { zeichen: "min(x) / max(x)",      was: "Nur Minimum / nur Maximum" },
+              { zeichen: "sum(x)",               was: "Summe aller Werte" },
+              { zeichen: "quantile(x)",          was: "Quartile (0%, 25%, 50%, 75%, 100%)" },
+              { zeichen: "quantile(x, 0.25)",    was: "Nur das 25%-Quantil (Q1)" },
+              { zeichen: "IQR(x)",               was: "Interquartilsabstand (Q3 - Q1)" },
+              { zeichen: "table(x)",             was: "Häufigkeitstabelle (für Kategorien)" },
+              { zeichen: "prop.table(table(x))", was: "Relative Häufigkeiten (Anteile)" },
+              { zeichen: "cumsum(x)",            was: "Kumulative Summe" },
+              { zeichen: "diff(x)",              was: "Differenzen zwischen Elementen" },
+            ]
+          },
+          {
+            name: "Mathematische Funktionen", farbe: "#7AB87A",
+            items: [
+              { zeichen: "abs(x)",            was: "Absolutbetrag |x|" },
+              { zeichen: "sqrt(x)",           was: "Wurzel √x" },
+              { zeichen: "exp(x)",            was: "e^x (Exponentialfunktion)" },
+              { zeichen: "log(x)",            was: "Natürlicher Logarithmus ln(x)" },
+              { zeichen: "log10(x)",          was: "Logarithmus zur Basis 10" },
+              { zeichen: "log(x, base=2)",    was: "Logarithmus zur Basis 2" },
+              { zeichen: "round(x, digits=2)",was: "Runden auf 2 Dezimalstellen" },
+              { zeichen: "ceiling(x)",        was: "Aufrunden zur nächsten Ganzzahl" },
+              { zeichen: "floor(x)",          was: "Abrunden zur nächsten Ganzzahl" },
+              { zeichen: "sign(x)",           was: "Vorzeichen: -1, 0, oder 1" },
+            ]
+          },
+          {
+            name: "Verteilungsfunktionen", farbe: "#E8C547",
+            items: [
+              { zeichen: "dnorm(x, mean=0, sd=1)", was: "Dichte der Normalverteilung" },
+              { zeichen: "pnorm(x)",               was: "Kumulierte Wahrscheinlichkeit P(X ≤ x)" },
+              { zeichen: "qnorm(p)",               was: "Quantil der Normalverteilung" },
+              { zeichen: "rnorm(n, mean, sd)",      was: "n Zufallszahlen (normalverteilt)" },
+              { zeichen: "runif(n, min, max)",      was: "n Zufallszahlen (gleichverteilt)" },
+              { zeichen: "rbinom(n, size, prob)",   was: "Binomialverteilung Zufallszahlen" },
+              { zeichen: "set.seed(42)",            was: "⭐ Zufallszahlen reproduzierbar machen!" },
+            ]
+          },
+          {
+            name: "Korrelation & Zusammenhang", farbe: "#5BA8D4",
+            items: [
+              { zeichen: "cor(x, y)",                      was: "Pearson-Korrelation (Standard)" },
+              { zeichen: "cor(x, y, method='spearman')",   was: "Spearman-Rangkorrelation (nichtparametrisch)" },
+              { zeichen: "cor(df)",                        was: "Korrelationsmatrix für ganzen Data Frame" },
+              { zeichen: "cor.test(x, y)",                 was: "Korrelationstest mit p-Wert" },
+              { zeichen: "cov(x, y)",                      was: "Kovarianz" },
+            ]
+          }
+        ]
+      },
+      kontrolle: {
+        title: "Programmier-Strukturen",
+        subtitle: "Schleifen, Bedingungen, eigene Funktionen.",
+        gruppen: [
+          {
+            name: "if / else — Bedingungen", farbe: "#A87FC4",
+            items: [
+              { zeichen: "if (x > 5) { ... }",                  was: "Wenn x > 5, dann tue..." },
+              { zeichen: "if (x > 5) { ... } else { ... }",     was: "Wenn/sonst" },
+              { zeichen: "ifelse(x > 5, 'groß', 'klein')",      was: "Vektorisiertes if/else (für ganze Spalten!)" },
+            ],
+            beispiel: `# Bier klassifizieren
+stammwuerze <- 14.5
+if (stammwuerze > 14) {
+  cat("Starkbier!")
+} else if (stammwuerze > 12) {
+  cat("Normalbier")
+} else {
+  cat("Leichtbier")
+}`
+          },
+          {
+            name: "for — Schleife", farbe: "#5BC4A0",
+            items: [
+              { zeichen: "for (i in 1:10) { ... }",          was: "Schleife von 1 bis 10" },
+              { zeichen: "for (bier in bier_vektor) { ... }",was: "Über alle Elemente iterieren" },
+              { zeichen: "next",                             was: "Aktuelle Iteration überspringen" },
+              { zeichen: "break",                            was: "Schleife vorzeitig beenden" },
+            ],
+            beispiel: `# Stammwürze ausgeben
+biere  <- c("Helles", "Weizen", "IPA")
+wuerze <- c(11.5, 13.0, 14.0)
+
+for (i in 1:length(biere)) {
+  cat(biere[i], ":", wuerze[i], "°P\n")
+}`
+          },
+          {
+            name: "Eigene Funktionen schreiben", farbe: "#E8C547",
+            items: [
+              { zeichen: "meineFn <- function(x) { return(x*2) }",  was: "Einfache Funktion" },
+              { zeichen: "meineFn <- function(x, y=10) { ... }",     was: "Funktion mit Standardwert" },
+              { zeichen: "return(wert)",                             was: "Rückgabewert der Funktion" },
+            ],
+            beispiel: `# Stammwürze → Alkohol schätzen
+berechne_alkohol <- function(sw, faktor=0.42) {
+  alkohol <- faktor * sw - 0.3
+  return(round(alkohol, 1))
+}
+berechne_alkohol(12)   # → 4.7
+berechne_alkohol(16)   # → 6.4`
+          },
+          {
+            name: "apply-Familie (statt Schleifen!)", farbe: "#5BA8D4",
+            items: [
+              { zeichen: "apply(df, 1, mean)",      was: "Funktion auf ZEILEN anwenden" },
+              { zeichen: "apply(df, 2, mean)",      was: "Funktion auf SPALTEN anwenden" },
+              { zeichen: "lapply(liste, funktion)", was: "Auf jedes Listenelement → Liste zurück" },
+              { zeichen: "sapply(liste, funktion)", was: "Wie lapply, aber gibt Vektor zurück" },
+              { zeichen: "tapply(x, gruppe, mean)", was: "Mittelwert je Gruppe — sehr nützlich!" },
+            ]
+          }
+        ]
+      },
+      ggplot: {
+        title: "ggplot2 — Professionelle Grafiken",
+        subtitle: "Schicht für Schicht aufbauen — wie ein Braurezept.",
+        gruppen: [
+          {
+            name: "Das Grundprinzip", farbe: "#E87A7A",
+            items: [
+              { zeichen: "library(ggplot2)",                   was: "Paket laden (einmal pro Session)" },
+              { zeichen: "ggplot(daten, aes(x=..., y=...))",   was: "SCHICHT 1: Grundlage + Achsen" },
+              { zeichen: "+ geom_xxx()",                       was: "SCHICHT 2: Was zeichnen?" },
+              { zeichen: "+ theme_xxx()",                      was: "SCHICHT 3: Wie aussehen?" },
+              { zeichen: "+ labs(title='', x='', y='')",       was: "SCHICHT 4: Beschriftungen" },
+            ],
+            beispiel: `ggplot(bier_df, aes(x=stammwuerze, y=alkohol, color=sorte)) +
+  geom_point(size=3, alpha=0.7) +
+  geom_smooth(method="lm", se=FALSE) +
+  theme_minimal() +
+  labs(title="Stammwürze vs. Alkohol",
+       x="Stammwürze (°P)", y="Alkohol (%vol)")`
+          },
+          {
+            name: "Geom-Typen (Was zeichnen?)", farbe: "#F0A050",
+            items: [
+              { zeichen: "geom_point()",             was: "Punkte → Scatterplot" },
+              { zeichen: "geom_line()",              was: "Linie → Verlauf/Zeitreihe" },
+              { zeichen: "geom_bar(stat='count')",   was: "Balken → Häufigkeiten zählen" },
+              { zeichen: "geom_col()",               was: "Balken → Werte direkt aus Daten" },
+              { zeichen: "geom_histogram(bins=20)",  was: "Histogramm" },
+              { zeichen: "geom_boxplot()",           was: "Boxplot" },
+              { zeichen: "geom_violin()",            was: "Violin-Plot (schöner als Boxplot)" },
+              { zeichen: "geom_smooth(method='lm')", was: "Regressionsgerade einzeichnen" },
+              { zeichen: "geom_hline(yintercept=5)", was: "Horizontale Linie einzeichnen" },
+              { zeichen: "geom_density()",           was: "Dichteplot (glatte Kurve)" },
+            ]
+          },
+          {
+            name: "Aesthetics — Was beeinflusst was?", farbe: "#5BC4A0",
+            items: [
+              { zeichen: "aes(x=..., y=...)",     was: "Achsen-Variablen" },
+              { zeichen: "aes(color=gruppe)",     was: "Farbe nach Gruppe (Linien, Punkte)" },
+              { zeichen: "aes(fill=gruppe)",      was: "Füllfarbe nach Gruppe (Flächen, Balken)" },
+              { zeichen: "aes(size=wert)",        was: "Größe nach numerischem Wert" },
+              { zeichen: "aes(shape=gruppe)",     was: "Form nach Gruppe" },
+              { zeichen: "color='red'",           was: "FESTE Farbe (AUSSERHALB von aes!)" },
+            ]
+          },
+          {
+            name: "Themes & Layouts", farbe: "#A87FC4",
+            items: [
+              { zeichen: "theme_minimal()",                       was: "Minimalistisch (für Berichte empfohlen!)" },
+              { zeichen: "theme_classic()",                       was: "Klassisch, weiß, mit Achsen" },
+              { zeichen: "theme_bw()",                            was: "Schwarz-Weiß" },
+              { zeichen: "facet_wrap(~gruppe)",                   was: "Separate Plots je Gruppe" },
+              { zeichen: "facet_grid(zeile~spalte)",              was: "Raster aus Plots" },
+              { zeichen: "coord_flip()",                          was: "x und y-Achse tauschen" },
+              { zeichen: "scale_fill_manual(values=c('r','b'))",  was: "Farben manuell festlegen" },
+            ]
+          }
+        ]
+      },
+      tests: {
+        title: "Statistische Tests — Der Fahrplan",
+        subtitle: "1. Voraussetzungen → 2. Test wählen → 3. Durchführen → 4. Interpretieren",
+        gruppen: [
+          {
+            name: "Schritt 1: Voraussetzungen prüfen", farbe: "#7AB87A",
+            items: [
+              { zeichen: "shapiro.test(x)",                    was: "Normalverteilungstest · p > 0.05 → normalverteilt ✓" },
+              { zeichen: "qqnorm(x); qqline(x)",               was: "QQ-Plot · Punkte auf Linie → normalverteilt ✓" },
+              { zeichen: "library(car); leveneTest(y~gruppe)",  was: "Varianzhomogenität · p > 0.05 → gleiche Varianzen ✓" },
+              { zeichen: "bartlett.test(y~gruppe)",             was: "Alternative zu Levene (nur bei Normalverteilung!)" },
+            ]
+          },
+          {
+            name: "Mittelwertvergleiche", farbe: "#5BA8D4",
+            items: [
+              { zeichen: "t.test(x, mu=10)",          was: "Einstichproben-t-Test · Vergleich mit bekanntem Wert" },
+              { zeichen: "t.test(x, y)",              was: "Zweistichproben-t-Test · zwei unabhängige Gruppen" },
+              { zeichen: "t.test(x, y, var.equal=T)", was: "t-Test bei gleichen Varianzen" },
+              { zeichen: "t.test(x, y, paired=TRUE)", was: "Gepaarter t-Test · Vorher/Nachher" },
+              { zeichen: "wilcox.test(x, y)",         was: "Mann-Whitney-U · nichtparametrisch" },
+            ]
+          },
+          {
+            name: "Mehrere Gruppen (ANOVA)", farbe: "#E8C547",
+            items: [
+              { zeichen: "aov(y ~ gruppe, data=df)",   was: "Einfaktorielle ANOVA" },
+              { zeichen: "summary(modell)",            was: "Ergebnis anzeigen · p < 0.05 → Unterschied existiert" },
+              { zeichen: "TukeyHSD(modell)",           was: "Post-hoc-Test · welche Paare unterscheiden sich?" },
+              { zeichen: "plot(TukeyHSD(modell))",     was: "Tukey-Ergebnis visualisieren" },
+              { zeichen: "aov(y ~ A * B, data=df)",    was: "Zweifaktorielle ANOVA (mit Interaktion)" },
+              { zeichen: "kruskal.test(y ~ gruppe)",   was: "Kruskal-Wallis · nichtparametrische ANOVA" },
+            ]
+          },
+          {
+            name: "Kategoriale Daten", farbe: "#E87A7A",
+            items: [
+              { zeichen: "chisq.test(table(x, y))",      was: "Chi-Quadrat-Unabhängigkeitstest" },
+              { zeichen: "chisq.test(x, p=c(0.5,0.5))", was: "Chi-Quadrat-Anpassungstest" },
+              { zeichen: "fisher.test(table(x, y))",     was: "Fischer-Test · bei kleinen Stichproben" },
+            ]
+          },
+          {
+            name: "Regression", farbe: "#D4835B",
+            items: [
+              { zeichen: "lm(y ~ x, data=df)",              was: "Einfache lineare Regression" },
+              { zeichen: "lm(y ~ x1 + x2 + x3, data=df)",  was: "Multiple Regression" },
+              { zeichen: "summary(modell)",                  was: "Koeffizienten, R², p-Werte anzeigen" },
+              { zeichen: "plot(modell)",                     was: "4 Diagnose-Plots (Residuen!)" },
+              { zeichen: "predict(modell, newdata=df)",      was: "Vorhersagen treffen" },
+              { zeichen: "AIC(modell)",                      was: "Modellgüte vergleichen (kleiner = besser)" },
+              { zeichen: "glm(y ~ x, family=binomial)",      was: "Logistische Regression (y = 0/1)" },
+              { zeichen: "library(car); vif(modell)",        was: "Multikollinearität · Werte > 10 = Problem!" },
+              { zeichen: "step(modell)",                     was: "Schrittweise Variablenauswahl" },
+            ]
+          },
+          {
+            name: "p-Wert & Effektgröße", farbe: "#A87FC4",
+            items: [
+              { zeichen: "p < 0.05",       was: "Signifikant · H₀ ablehnen · *" },
+              { zeichen: "p < 0.01",       was: "Sehr signifikant · **" },
+              { zeichen: "p < 0.001",      was: "Hochsignifikant · ***" },
+              { zeichen: "Cohen's d < 0.2",was: "Kleiner Effekt" },
+              { zeichen: "Cohen's d ≈ 0.5",was: "Mittlerer Effekt" },
+              { zeichen: "Cohen's d > 0.8",was: "Großer Effekt" },
+              { zeichen: "R² (0–1)",       was: "Varianzaufklärung · 0.7 = 70% erklärt" },
+              { zeichen: "η² > 0.14",      was: "Großer Effekt bei ANOVA" },
+            ]
+          }
+        ]
+      },
+      shortcuts: {
+        title: "RStudio Shortcuts & Tipps",
+        subtitle: "Diese Shortcuts sparen dir täglich 30 Minuten.",
+        gruppen: [
+          {
+            name: "Unverzichtbar — täglich nutzen", farbe: "#F0A050",
+            items: [
+              { zeichen: "Alt + -",           was: "<- (Zuweisungspfeil) — DER wichtigste Shortcut!" },
+              { zeichen: "Strg + Enter",       was: "Aktuelle Zeile/Auswahl ausführen" },
+              { zeichen: "Strg + Shift + M",   was: "%>% (Pipe-Operator, tidyverse)" },
+              { zeichen: "Tab",                was: "Autocomplete — IMMER nutzen!" },
+              { zeichen: "↑ in Console",       was: "Letzten Befehl wiederholen" },
+              { zeichen: "Strg + L",           was: "Console leeren" },
+              { zeichen: "Esc",                was: "Laufenden Befehl abbrechen" },
+              { zeichen: "Strg + Z / Y",       was: "Rückgängig / Wiederherstellen" },
+            ]
+          },
+          {
+            name: "Script & Editor", farbe: "#5BC4A0",
+            items: [
+              { zeichen: "Strg + S",           was: "Script speichern" },
+              { zeichen: "Strg + Shift + N",   was: "Neues R-Script" },
+              { zeichen: "Strg + A + Enter",   was: "Gesamtes Script ausführen" },
+              { zeichen: "Strg + Shift + C",   was: "Zeile auskommentieren (#)" },
+              { zeichen: "Strg + F",           was: "Suchen & Ersetzen" },
+              { zeichen: "Alt + Shift + K",    was: "Alle Shortcuts anzeigen!" },
+              { zeichen: "Strg + 1 / 2",       was: "Fokus: Script / Console" },
+            ]
+          },
+          {
+            name: "Pakete & Hilfe", farbe: "#5BA8D4",
+            items: [
+              { zeichen: "install.packages('x')", was: "Paket installieren (einmal!)" },
+              { zeichen: "library(x)",            was: "Paket laden (jede Session!)" },
+              { zeichen: "?mean",                 was: "Hilfe zu einer Funktion" },
+              { zeichen: "??regression",          was: "Hilfe-Suche nach Thema" },
+              { zeichen: "args(mean)",            was: "Argumente einer Funktion" },
+            ]
+          },
+          {
+            name: "Wichtige Pakete", farbe: "#E8C547",
+            items: [
+              { zeichen: "ggplot2",    was: "Professionelle Grafiken" },
+              { zeichen: "dplyr",     was: "Daten manipulieren (filter, mutate...)" },
+              { zeichen: "tidyr",     was: "Daten umformen" },
+              { zeichen: "readxl",    was: "Excel-Dateien einlesen" },
+              { zeichen: "car",       was: "Levene-Test, VIF, Diagnostik" },
+              { zeichen: "rmarkdown", was: "Reproduzierbare Berichte" },
+              { zeichen: "tidyverse", was: "Alles auf einmal: ggplot2 + dplyr + ..." },
+            ]
+          },
+          {
+            name: "Fehlermeldungen verstehen", farbe: "#E87A7A",
+            items: [
+              { zeichen: "Error: object 'x' not found",      was: "Variable nicht definiert → Schreibfehler? Ausgeführt?" },
+              { zeichen: "Error: could not find function",    was: "Paket nicht geladen → library() vergessen?" },
+              { zeichen: "subscript out of bounds",           was: "Index zu groß → length() prüfen" },
+              { zeichen: "NAs introduced by coercion",        was: "Text → Zahl gescheitert" },
+              { zeichen: "+ in der Console",                  was: "Befehl unvollständig → Klammer zu? Esc drücken!" },
+              { zeichen: "Warning ≠ Error!",                  was: "Warnungen meist okay · Errors müssen behoben werden" },
+            ]
+          }
+        ]
+      }
+    };
+
+    function App() {
+      const [aktiv, setAktiv] = useState("tastatur");
+      const [suche, setSuche] = useState("");
+      const [aufgeklappt, setAufgeklappt] = useState({});
+
+      const sektion = data[aktiv];
+      const aktiveSection = SECTIONS.find(s => s.id === aktiv);
+
+      const toggleGruppe = (idx) => {
+        const key = `${aktiv}-${idx}`;
+        setAufgeklappt(prev => ({ ...prev, [key]: prev[key] === false ? true : false }));
+      };
+
+      const filterItems = (items) => {
+        if (!suche) return items;
+        const q = suche.toLowerCase();
+        return items.filter(item =>
+          item.zeichen.toLowerCase().includes(q) ||
+          item.was.toLowerCase().includes(q)
+        );
+      };
+
+      const headerStyle = {
+        background: "linear-gradient(180deg,#0f0f0f,#080808)",
+        padding: "24px 20px 16px",
+        borderBottom: "1px solid #222",
+        position: "sticky", top: 0, zIndex: 100,
+      };
+
+      return (
+        <div style={{ fontFamily:"'Courier New',Courier,monospace", background:"#080808", minHeight:"100vh", color:"#ddd" }}>
+          {/* HEADER */}
+          <div style={headerStyle}>
+            <div style={{ maxWidth:900, margin:"0 auto" }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:10 }}>
+                <div>
+                  <div style={{ fontSize:10, letterSpacing:4, color:"#444", marginBottom:4 }}>HSWT · STATISTIK · BRAU- & GETRÄNKETECHNOLOGIE</div>
+                  <h1 style={{ margin:0, fontSize:20, fontWeight:"bold", color:"#fff" }}>
+                    R Cheatsheet <span style={{ color: aktiveSection?.color }}>— vollständig</span>
+                  </h1>
+                </div>
+                <input
+                  placeholder="Suchen... z.B. mean, t.test"
+                  value={suche}
+                  onChange={e => setSuche(e.target.value)}
+                  style={{
+                    background:"#151515", border:"1px solid #333", color:"#ddd",
+                    padding:"7px 12px", fontFamily:"'Courier New',monospace",
+                    fontSize:12, width:200, outline:"none"
+                  }}
+                />
+              </div>
+              <div style={{ display:"flex", gap:4, marginTop:14, flexWrap:"wrap" }}>
+                {SECTIONS.map(s => (
+                  <button key={s.id} onClick={() => { setAktiv(s.id); setSuche(""); }} style={{
+                    padding:"5px 12px",
+                    background: aktiv===s.id ? s.color : "#111",
+                    color: aktiv===s.id ? "#000" : "#777",
+                    border:`1px solid ${aktiv===s.id ? s.color : "#2a2a2a"}`,
+                    cursor:"pointer", fontSize:11,
+                    fontFamily:"'Courier New',monospace",
+                    fontWeight: aktiv===s.id ? "bold" : "normal",
+                    whiteSpace:"nowrap",
+                  }}>{s.label}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* CONTENT */}
+          <div style={{ maxWidth:900, margin:"0 auto", padding:20 }}>
+            <div style={{ marginBottom:20 }}>
+              <h2 style={{ margin:"0 0 4px", fontSize:16, color: aktiveSection?.color }}>{sektion.title}</h2>
+              <p style={{ margin:0, color:"#555", fontSize:12 }}>{sektion.subtitle}</p>
+            </div>
+
+            {sektion.gruppen.map((gruppe, gi) => {
+              const key = `${aktiv}-${gi}`;
+              const isOpen = aufgeklappt[key] !== false;
+              const filtered = filterItems(gruppe.items);
+              if (suche && filtered.length === 0) return null;
+
+              return (
+                <div key={gi} style={{ marginBottom:10, border:"1px solid #1e1e1e", background:"#0d0d0d" }}>
+                  <button onClick={() => toggleGruppe(gi)} style={{
+                    width:"100%", padding:"10px 14px", background:"transparent",
+                    border:"none", cursor:"pointer",
+                    display:"flex", justifyContent:"space-between", alignItems:"center", textAlign:"left"
+                  }}>
+                    <span style={{ fontSize:11, color:gruppe.farbe, letterSpacing:1, textTransform:"uppercase", fontWeight:"bold" }}>
+                      {gruppe.name}
+                      <span style={{ color:"#444", marginLeft:8, fontWeight:"normal" }}>({filtered.length})</span>
+                    </span>
+                    <span style={{ color:"#444" }}>{isOpen ? "▲" : "▼"}</span>
+                  </button>
+
+                  {isOpen && (
+                    <div style={{ borderTop:`1px solid ${gruppe.farbe}22` }}>
+                      {filtered.map((item, ii) => (
+                        <div key={ii}
+                          style={{ display:"grid", gridTemplateColumns:"270px 1fr", borderBottom:"1px solid #111" }}
+                          onMouseEnter={e => e.currentTarget.style.background="#111"}
+                          onMouseLeave={e => e.currentTarget.style.background="transparent"}>
+                          <div style={{
+                            padding:"8px 14px", fontFamily:"'Courier New',monospace",
+                            fontSize:12, color:gruppe.farbe,
+                            borderRight:"1px solid #111", wordBreak:"break-all"
+                          }}>{item.zeichen}</div>
+                          <div style={{ padding:"8px 14px", fontSize:12, color:"#aaa", lineHeight:1.4 }}>
+                            {item.was}
+                          </div>
+                        </div>
+                      ))}
+                      {gruppe.beispiel && (
+                        <div style={{ padding:"12px 14px", background:"#060606", borderTop:"1px solid #1a1a1a" }}>
+                          <div style={{ fontSize:9, color:"#444", letterSpacing:2, marginBottom:6 }}>BEISPIEL</div>
+                          <pre style={{
+                            margin:0, fontFamily:"'Courier New',monospace",
+                            fontSize:11, color:"#7aba7a", lineHeight:1.7, whiteSpace:"pre-wrap"
+                          }}>{gruppe.beispiel}</pre>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ maxWidth:900, margin:"0 auto", padding:"0 20px 32px", color:"#2a2a2a", fontSize:10, letterSpacing:1 }}>
+            BrewStudy R Cheatsheet · HSWT Brau- & Getränketechnologie · Ziel: Statistik-Prüfung 1,0 🍺
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
