@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>R Reference — Vollständiges Nachschlagewerk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#09090e;--bg2:#0f0f16;--bg3:#141420;--border:#1e1e2e;--border2:#2a2a3e;--text:#c8c8d8;--muted:#55556a;--gold:#c9a84c;--gold2:#e8c96a;--mono:'IBM Plex Mono',monospace;--serif:'Playfair Display',serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:13px;line-height:1.5}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.header{position:sticky;top:0;z-index:200;background:var(--bg);border-bottom:1px solid var(--border);padding:20px 28px 0}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.header-label{font-size:9px;letter-spacing:5px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px}
+.header-title{font-family:var(--serif);font-size:22px;font-weight:600;color:#fff;letter-spacing:-.3px}
+.header-title span{color:var(--gold)}
+.search-wrap{position:relative}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;pointer-events:none}
+.search{background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 12px 8px 30px;font-family:var(--mono);font-size:12px;width:230px;outline:none;transition:border-color .15s}
+.search:focus{border-color:var(--gold)}
+.search::placeholder{color:var(--muted)}
+.nav{display:flex;gap:0;overflow-x:auto;padding-bottom:0}
+.nav::-webkit-scrollbar{height:0}
+.nav-btn{padding:8px 14px 10px;background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;transition:all .15s;letter-spacing:.3px}
+.nav-btn:hover{color:var(--text)}
+.nav-btn.active{font-weight:600}
+main{max-width:960px;margin:0 auto;padding:28px 24px 60px}
+.section-header{margin-bottom:24px}
+.section-title{font-family:var(--serif);font-size:20px;font-weight:600;color:#fff;margin-bottom:4px}
+.section-sub{font-size:11px;color:var(--muted);letter-spacing:.3px}
+.group{margin-bottom:10px;border:1px solid var(--border)}
+.group-header{width:100%;padding:11px 16px;background:var(--bg2);border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left;transition:background .1s}
+.group-header:hover{background:var(--bg3)}
+.group-name{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600}
+.group-meta{display:flex;align-items:center;gap:10px}
+.group-count{font-size:10px;color:var(--muted)}
+.group-arrow{font-size:10px;color:var(--muted);transition:transform .2s;display:inline-block}
+.group-arrow.open{transform:rotate(180deg)}
+.group-body{border-top:1px solid var(--border)}
+.row{display:grid;grid-template-columns:260px 1fr;border-bottom:1px solid var(--border);transition:background .08s}
+.row3{grid-template-columns:130px 190px 1fr}
+.row:last-child{border-bottom:none}
+.row:hover{background:rgba(201,168,76,.04)}
+.row-code{padding:8px 16px;font-size:12px;font-weight:500;border-right:1px solid var(--border);word-break:break-all;display:flex;align-items:center}
+.row-desc{padding:8px 16px;font-size:12px;color:#9898b0;display:flex;align-items:center;line-height:1.4}
+.row-mid{padding:8px 16px;font-size:11px;color:#6a6a80;border-right:1px solid var(--border);display:flex;align-items:center;line-height:1.4}
+.example-block{padding:14px 16px;background:#060609;border-top:1px solid var(--border)}
+.example-label{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+pre{font-family:var(--mono);font-size:11px;color:#7ac47a;line-height:1.75;white-space:pre-wrap}
+.c{color:var(--muted)}
+.tip{padding:12px 16px;background:rgba(201,168,76,.06);border-left:2px solid var(--gold);margin-bottom:10px;font-size:12px;color:#a8a870;line-height:1.6}
+.tip strong{color:var(--gold2)}
+.tip code{background:rgba(255,255,255,.06);padding:1px 4px;font-family:var(--mono);font-size:11px}
+.empty{padding:40px;text-align:center;color:var(--muted);font-size:12px}
+footer{max-width:960px;margin:0 auto;padding:0 24px 40px;font-size:10px;color:#2a2a38;letter-spacing:1px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:600px){.row,.row3{grid-template-columns:1fr}.row-code{border-right:none;border-bottom:1px solid var(--border)}.row-mid{border-right:none;border-bottom:1px solid var(--border)}.header{padding:16px 16px 0}main{padding:20px 16px 40px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div>
+      <span class="header-label">Statistik Brau- &amp; Getränketechnologie</span>
+      <h1 class="header-title">R Reference <span id="section-accent">— vollständig</span></h1>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search" id="search" placeholder="Suchen... z.B. t.test, ggplot" autocomplete="off"/>
+    </div>
+  </div>
+  <nav class="nav" id="nav"></nav>
+</div>
+<main id="main"></main>
+<footer>
+  <span>R Reference — Brau- &amp; Getränketechnologie</span>
+  <span>Statistik · Forschung · Publikation</span>
+</footer>
+<script>
+const S=[
+  {id:"tastatur",   label:"⌨️ Tastatur",    color:"#c9a84c"},
+  {id:"shortcuts",  label:"🚀 Shortcuts",    color:"#f0a050"},
+  {id:"basics",     label:"🧱 Basics",       color:"#5bc4a0"},
+  {id:"funktionen", label:"🔢 Funktionen",   color:"#d4835b"},
+  {id:"daten",      label:"📦 Daten",        color:"#5ba8d4"},
+  {id:"mathematik", label:"🧮 Mathematik",   color:"#9bd4a0"},
+  {id:"steuerung",  label:"🔁 Steuerung",    color:"#a87fc4"},
+  {id:"ggplot",     label:"📊 ggplot2",      color:"#e87a7a"},
+  {id:"tidyverse",  label:"🌊 Tidyverse",    color:"#7ab8d4"},
+  {id:"tests",      label:"⚗️ Tests",        color:"#7ab87a"},
+  {id:"modelle",    label:"📈 Modelle",      color:"#d4a05b"},
+  {id:"forschung",  label:"🔬 Forschung",    color:"#7abcd4"},
+  {id:"publikation",label:"📝 Publikation",  color:"#c47ab8"},
+];
+
+const D={
+tastatur:{title:"Sonderzeichen — Deutsche Tastatur (QWERTZ)",sub:"AltGr = rechte Alt-Taste  ·  Shift = Hochstelltaste  ·  Windows",
+tip:"<strong>Wichtigster Shortcut in RStudio:</strong> <code>Alt + -</code> (linke Alt-Taste + Bindestrich) schreibt automatisch <code>&lt;-</code>.",
+gruppen:[
+{name:"Für R unverzichtbar",farbe:"#c9a84c",items:[
+["&lt;-","Alt (links) + Bindestrich  ODER  &lt; dann -","Zuweisungspfeil — wichtigster Operator!"],
+["&lt;","Taste zwischen linker Shift-Taste und Y","Kleiner als"],
+["&gt;","Shift + selbe Taste","Größer als"],
+["#","Taste rechts neben Ä (vor Enter)","Kommentar — alles danach wird ignoriert"],
+["$","Shift + 4","Spalten-Zugriff: df$spalte"],
+["_","Shift + Bindestrich","Unterstrich (in Variablennamen)"],
+["~","AltGr + +","Tilde — für Formeln: lm(y ~ x)"],
+["|","AltGr + &lt;","Oder-Operator"],
+["%&gt;%","Strg + Shift + M (RStudio)","Pipe-Operator (tidyverse)"],
+["|&gt;","Strg + Shift + M (R ≥ 4.1)","Native Pipe — kein Paket nötig"],
+["==","= zweimal","Vergleich — NICHT = verwenden!"],
+]},
+{name:"Klammern",farbe:"#5bc4a0",items:[
+["(  )","Shift + 8  /  Shift + 9","Runde Klammern — für Funktionsaufrufe"],
+["[  ]","AltGr + 8  /  AltGr + 9","Eckige Klammern — für Indexierung"],
+["{  }","AltGr + 7  /  AltGr + 0","Geschweifte Klammern — für Code-Blöcke"],
+]},
+{name:"Weitere Sonderzeichen",farbe:"#5ba8d4",items:[
+["@","AltGr + Q","In R selten gebraucht"],
+["\\","AltGr + ß","Backslash — in Dateipfaden: C:\\\\Ordner"],
+["/","Shift + 7","Schrägstrich — Dateipfade und Division"],
+['"',"Shift + 2","Anführungszeichen für Strings: \"Helles\""],
+["'","Shift + #","Einfaches Anführungszeichen"],
+[":","Shift + .","Doppelpunkt — Sequenz: 1:10"],
+["!","Shift + 1","Nicht-Operator: != oder !TRUE"],
+["&","Shift + 6","Und-Operator"],
+["^","Zirkumflex-Taste","Potenz: 2^3 = 8"],
+]},
+]},
+
+basics:{title:"R Grundlagen",sub:"Variablen, Datentypen, Operatoren — täglich gebraucht",
+gruppen:[
+{name:"Zuweisungen & Ausgabe",farbe:"#5bc4a0",items:[
+["x &lt;- 5","Zuweisung (Standard in R)"],
+["x = 5","Geht auch — aber &lt;- bevorzugen"],
+["print(x)","Explizite Ausgabe (nötig in Schleifen!)"],
+["cat('Wert:', x)","Formatierte Ausgabe ohne [1]"],
+["rm(x)","Variable löschen"],
+["ls()","Alle Variablen im Environment anzeigen"],
+["rm(list=ls())","⚠️ Gesamtes Environment leeren"],
+]},
+{name:"Datentypen",farbe:"#c9a84c",items:[
+["42","numeric — Zahl"],
+["3.14","numeric — Dezimalzahl"],
+['"Text"',"character — String (immer Anführungszeichen!)"],
+["TRUE / FALSE","logical — Wahrheitswert"],
+["1L","integer — Ganzzahl"],
+["NA","Not Available — fehlender Wert"],
+["NaN","Not a Number: 0/0"],
+["Inf / -Inf","Unendlich: 1/0"],
+["NULL","Leeres Objekt (kein Wert)"],
+["class(x)","Typ abfragen"],
+["is.numeric(x)","Typ prüfen → TRUE/FALSE"],
+["as.numeric(x)","In Zahl umwandeln"],
+["as.character(x)","In Text umwandeln"],
+["as.factor(x)","In Faktor (Kategorien) umwandeln"],
+["as.integer(x)","In Ganzzahl umwandeln"],
+]},
+{name:"Operatoren",farbe:"#d4835b",items:[
+["+ - * /","Grundrechenarten"],
+["^","Potenz: 2^3 = 8"],
+["%%","Modulo: 10 %% 3 = 1"],
+["%/%","Ganzzahldivision: 10 %/% 3 = 3"],
+["== != &lt; &gt; &lt;= &gt;=","Vergleiche → TRUE/FALSE"],
+["& und &&","UND (& vektorweise, && einmalig)"],
+["| und ||","ODER (| vektorweise, || einmalig)"],
+["!","NICHT: !TRUE = FALSE"],
+["%in%","Enthält: 'A' %in% c('A','B')"],
+["identical(x, y)","Exakte Gleichheit (auch Typ!)"],
+["all.equal(x, y)","Numerische Gleichheit mit Toleranz"],
+]},
+]},
+
+daten:{title:"Datenstrukturen",sub:"Vektoren, Data Frames, Listen — das Herzstück von R",
+gruppen:[
+{name:"Vektor",farbe:"#5ba8d4",items:[
+["c(1, 2, 3)","Vektor erstellen"],
+["1:10","Ganzzahl-Sequenz 1 bis 10"],
+["seq(1, 10, by=0.5)","Sequenz mit Schrittweite"],
+["seq(0, 1, length=100)","100 gleichmäßige Werte"],
+["rep(5, times=3)","Wiederholung: 5 5 5"],
+["rep(c(1,2), each=3)","1 1 1 2 2 2"],
+["x[3]","3. Element"],
+["x[2:5]","Elemente 2 bis 5"],
+["x[-1]","Alles außer Element 1"],
+["x[x > 10]","Alle Elemente > 10"],
+["which(x > 10)","Indizes der Elemente > 10"],
+["length(x)","Anzahl Elemente"],
+["sort(x)","Aufsteigend sortieren"],
+["order(x)","Indizes der sortierten Reihenfolge"],
+["unique(x)","Eindeutige Werte"],
+["duplicated(x)","Welche Werte sind Duplikate?"],
+]},
+{name:"Data Frame",farbe:"#5bc4a0",items:[
+["data.frame(a=c(1,2), b=c('x','y'))","Erstellen"],
+["df$spalte","Spalte auswählen → Vektor"],
+["df[['spalte']]","Spalte auswählen (robust)"],
+["df[1, ]","Erste Zeile"],
+["df[df$x > 5, ]","Filtern: Zeilen wo x > 5"],
+["nrow(df) / ncol(df)","Anzahl Zeilen / Spalten"],
+["dim(df)","Dimensionen: c(Zeilen, Spalten)"],
+["str(df)","Struktur — IMMER zuerst aufrufen!"],
+["summary(df)","Statistische Zusammenfassung"],
+["head(df, 10)","Erste n Zeilen"],
+["colnames(df)","Spaltennamen"],
+["df$neu &lt;- wert","Neue Spalte hinzufügen"],
+["df$spalte &lt;- NULL","Spalte löschen"],
+["rbind(df1, df2)","Zeilen zusammenfügen"],
+["cbind(df1, df2)","Spalten zusammenfügen"],
+["merge(df1, df2, by='id')","Tabellen verbinden (wie SQL JOIN)"],
+]},
+{name:"Import & Export",farbe:"#a87fc4",items:[
+['read.csv("datei.csv")',"CSV einlesen (Komma-getrennt)"],
+['read.csv2("datei.csv")',"CSV einlesen (Semikolon — Standard DE!)"],
+['read.csv("f.csv", dec=",")',"Komma als Dezimalzeichen"],
+["library(readxl)","Excel-Paket laden"],
+['read_excel("datei.xlsx")',"Excel einlesen"],
+['read_excel("datei.xlsx", sheet=2)',"Bestimmtes Tabellenblatt"],
+["library(haven)","SPSS/SAS/Stata-Paket"],
+['read_spss("datei.sav")',"SPSS-Datei einlesen"],
+['write.csv(df, "out.csv", row.names=FALSE)',"Als CSV speichern"],
+['saveRDS(obj, "datei.rds")',"R-Objekt speichern (schnell, kompakt)"],
+['readRDS("datei.rds")',"R-Objekt laden"],
+["getwd()","Arbeitsverzeichnis anzeigen"],
+['setwd("C:/Pfad/Ordner")',"Arbeitsverzeichnis setzen"],
+]},
+{name:"Fehlende Werte (NA)",farbe:"#e87a7a",items:[
+["is.na(x)","Welche Werte sind NA?"],
+["anyNA(x)","Gibt es überhaupt NAs?"],
+["sum(is.na(df))","Gesamtanzahl NAs"],
+["colSums(is.na(df))","NAs je Spalte"],
+["na.omit(df)","Alle Zeilen mit NA entfernen"],
+["complete.cases(df)","Logischer Vektor: vollständige Zeilen?"],
+["mean(x, na.rm=TRUE)","Mittelwert ohne NAs"],
+["tidyr::drop_na(df)","NAs entfernen (tidyverse)"],
+["replace(x, is.na(x), 0)","NAs durch 0 ersetzen"],
+]},
+]},
+
+tidyverse:{title:"Tidyverse — Modernes Daten-Management",sub:"dplyr + tidyr + stringr + lubridate + purrr",
+tip:"<code>install.packages('tidyverse')</code> installiert alles auf einmal. In jedem Script: <code>library(tidyverse)</code>",
+gruppen:[
+{name:"dplyr — Daten manipulieren",farbe:"#7ab8d4",
+beispiel:`library(tidyverse)
+
+df |>
+  filter(alkohol > 5) |>
+  select(bier, alkohol, sorte) |>
+  mutate(alk_kcal = alkohol * 7) |>
+  arrange(desc(alkohol)) |>
+  group_by(sorte) |>
+  summarise(
+    n        = n(),
+    mean_alk = mean(alkohol, na.rm=TRUE),
+    sd_alk   = sd(alkohol)
+  )`,
+items:[
+["filter(df, x > 5)","Zeilen filtern"],
+["filter(df, x %in% c(1,2,3))","Enthält-Filter"],
+["select(df, a, b, c)","Spalten auswählen"],
+["select(df, -spalte)","Spalte ausschließen"],
+["select(df, starts_with('ph'))","Spalten nach Namensmuster"],
+["rename(df, neu=alt)","Spalte umbenennen"],
+["mutate(df, neu = a + b)","Neue Spalte berechnen"],
+["mutate(df, across(where(is.numeric), scale))","Alle numerischen Spalten transformieren"],
+["arrange(df, desc(spalte))","Absteigend sortieren"],
+["group_by(df, gruppe)","Gruppieren"],
+["summarise(df, m=mean(x))","Zusammenfassen je Gruppe"],
+["count(df, gruppe)","Häufigkeiten je Gruppe"],
+["n()","Anzahl Zeilen (in summarise)"],
+["n_distinct(x)","Anzahl eindeutiger Werte"],
+["slice_max(df, x, n=5)","Top 5 nach x"],
+["left_join(df1, df2, by='id')","Links-Join"],
+["case_when(x>10 ~ 'hoch', TRUE ~ 'low')","Mehrere if/else-Bedingungen"],
+]},
+{name:"tidyr — Daten umformen",farbe:"#5bc4a0",items:[
+["pivot_longer(df, cols=c(a,b), names_to='var', values_to='wert')","Wide → Long (für ggplot!)"],
+["pivot_wider(df, names_from=var, values_from=wert)","Long → Wide"],
+["separate(df, spalte, into=c('a','b'), sep='-')","Spalte aufteilen"],
+["unite(df, neu, a, b, sep='_')","Spalten zusammenführen"],
+["drop_na(df)","NAs entfernen"],
+["fill(df, spalte)","NAs mit vorherigem Wert füllen"],
+]},
+{name:"stringr — Text",farbe:"#c47ab8",items:[
+["str_detect(x, 'Muster')","Enthält der String das Muster?"],
+["str_extract(x, 'Muster')","Ersten Treffer extrahieren"],
+["str_replace(x, 'alt', 'neu')","Ersten Treffer ersetzen"],
+["str_replace_all(x,'a','b')","Alle Treffer ersetzen"],
+["str_to_lower(x)","Kleinbuchstaben"],
+["str_trim(x)","Leerzeichen am Rand entfernen"],
+["str_length(x)","Zeichenanzahl"],
+['str_glue("Wert: {x}")',"String-Interpolation"],
+]},
+{name:"lubridate — Datum & Zeit",farbe:"#f0a050",items:[
+["ymd('2024-01-15')","Text → Datum (ISO-Format)"],
+["dmy('15.01.2024')","Datum DE-Format"],
+["year(datum) / month(datum) / day(datum)","Teile extrahieren"],
+["today() / now()","Heutiges Datum / Zeitstempel"],
+["d + days(30)","30 Tage addieren"],
+]},
+{name:"purrr — Funktionales Programmieren",farbe:"#a87fc4",items:[
+["map(liste, fn)","Funktion auf jedes Element → Liste"],
+["map_dbl(liste, fn)","→ numerischer Vektor"],
+["map_df(liste, fn)","→ Data Frame"],
+["map2(x, y, fn)","Zwei Listen parallel"],
+["possibly(fn, otherwise=NA)","Fehlerresistente Funktion"],
+["safely(fn)","Gibt list(result, error) zurück"],
+]},
+]},
+
+funktionen:{title:"Statistische Funktionen",sub:"Deskriptiv, Verteilungen, Korrelation",
+gruppen:[
+{name:"Lage- & Streuungsmaße",farbe:"#d4835b",items:[
+["mean(x)","Arithmetisches Mittel"],
+["mean(x, trim=0.1)","Getrimmtes Mittel (10% an jedem Ende)"],
+["weighted.mean(x, w)","Gewichtetes Mittel"],
+["median(x)","Median"],
+["sd(x)","Standardabweichung (Stichprobe, n-1)"],
+["var(x)","Varianz (Stichprobe)"],
+["range(x)","c(Minimum, Maximum)"],
+["min(x) / max(x)","Minimum / Maximum"],
+["quantile(x)","Quartile: 0%, 25%, 50%, 75%, 100%"],
+["quantile(x, 0.9)","90%-Quantil"],
+["IQR(x)","Interquartilsabstand Q3 − Q1"],
+["mad(x)","Median Absolute Deviation (robust!)"],
+["table(x)","Häufigkeitstabelle"],
+["prop.table(table(x))","Relative Häufigkeiten"],
+["cut(x, breaks=5)","Numerisch → 5 Kategorien"],
+]},
+{name:"Mathematische Funktionen",farbe:"#7ab87a",items:[
+["abs(x)","Betrag |x|"],
+["sqrt(x)","Wurzel √x"],
+["exp(x)","e^x"],
+["log(x)","Natürlicher Logarithmus ln(x)"],
+["log10(x)","Zehnerlogarithmus"],
+["round(x, digits=2)","Runden auf 2 Dezimalstellen"],
+["ceiling(x) / floor(x)","Auf- / Abrunden"],
+["choose(n, k)","Binomialkoeffizient n über k"],
+["factorial(n)","Fakultät n!"],
+]},
+{name:"Verteilungsfunktionen",farbe:"#c9a84c",
+tip:"<strong>Präfix-Regel:</strong> d=Dichte · p=kumulierte Wahrscheinlichkeit · q=Quantil · r=Zufallszahlen",
+items:[
+["rnorm(n, mean, sd)","Normalverteilung — Zufallszahlen"],
+["dnorm(x, mean=0, sd=1)","Normalverteilung — Dichte"],
+["pnorm(x)","Normalverteilung — P(X ≤ x)"],
+["qnorm(p)","Normalverteilung — Quantil"],
+["rt(n, df)","t-Verteilung — Zufallszahlen"],
+["qt(p, df)","t-Verteilung — Quantil"],
+["rchisq(n, df)","Chi-Quadrat — Zufallszahlen"],
+["runif(n, min=0, max=1)","Gleichverteilung"],
+["rbinom(n, size, prob)","Binomialverteilung"],
+["rpois(n, lambda)","Poisson-Verteilung"],
+["set.seed(42)","⭐ Reproduzierbarkeit — immer setzen!"],
+]},
+{name:"Korrelation",farbe:"#5ba8d4",items:[
+["cor(x, y)","Pearson r"],
+["cor(x, y, method='spearman')","Spearman ρ (nicht-parametrisch)"],
+["cor(x, y, method='kendall')","Kendall τ"],
+["cor(df)","Korrelationsmatrix"],
+["cor(df, use='complete.obs')","Ohne NAs"],
+["cor.test(x, y)","Mit p-Wert & Konfidenzintervall"],
+["cov(x, y)","Kovarianz"],
+["library(corrplot); corrplot(cor(df))","Korrelationsmatrix visualisieren"],
+]},
+]},
+
+steuerung:{title:"Programmier-Strukturen",sub:"Bedingungen, Schleifen, Funktionen, Fehlerbehandlung",
+gruppen:[
+{name:"Bedingungen",farbe:"#a87fc4",
+beispiel:`stammwuerze <- 14.5
+
+if (stammwuerze > 16) {
+  cat("Bockbier\n")
+} else if (stammwuerze > 13) {
+  cat("Vollbier\n")
+} else {
+  cat("Schankbier\n")
+}
+
+# Vektorisiert — für ganze Spalten:
+df$klasse <- ifelse(df$stammwuerze > 13, "Vollbier", "Schankbier")
+
+# dplyr-Stil (empfohlen):
+df <- df |> mutate(klasse = case_when(
+  stammwuerze > 16 ~ "Bockbier",
+  stammwuerze > 13 ~ "Vollbier",
+  TRUE             ~ "Schankbier"
+))`,
+items:[
+["if (bed) { ... } else { ... }","Wenn / Sonst"],
+["ifelse(bed, ja, nein)","Vektorisiert — für Spalten!"],
+["case_when(...)","dplyr: elegantes if/else für Spalten"],
+]},
+{name:"Schleifen",farbe:"#5bc4a0",
+beispiel:`# for-Schleife
+for (i in 1:5) {
+  cat("Iteration", i, "\n")
+}
+
+# Tidyverse-Alternative — besser und schneller:
+library(purrr)
+map_dbl(df, mean, na.rm=TRUE)`,
+items:[
+["for (i in 1:n) { ... }","Schleife über Zahlenfolge"],
+["for (x in vektor) { ... }","Schleife über Elemente"],
+["while (bedingung) { ... }","Solange Bedingung TRUE"],
+["next / break","Überspringen / Abbrechen"],
+["sapply(1:n, fn)","⭐ Besser als for-Schleife"],
+["map(vektor, fn)","Tidyverse-Alternative"],
+]},
+{name:"Eigene Funktionen",farbe:"#c9a84c",
+beispiel:`# Funktion mit Standardwert
+berechne_re <- function(stammwuerze, faktor = 0.42) {
+  ergebnis <- faktor * stammwuerze - 0.3
+  return(round(ergebnis, 2))
+}
+berechne_re(12)       # → 4.74
+berechne_re(16, 0.45) # → 6.9
+
+# Mehrere Rückgabewerte als Liste:
+bier_stats <- function(x) {
+  list(n=length(x), M=mean(x), SD=sd(x))
+}`,
+items:[
+["fn &lt;- function(x) { ... }","Einfache Funktion"],
+["fn &lt;- function(x, y=10) { ... }","Mit Standardwert"],
+["return(wert)","Rückgabewert"],
+["stopifnot(x > 0)","Voraussetzung prüfen"],
+["warning('...') / stop('...')","Warnung / Fehler ausgeben"],
+]},
+{name:"Fehlerbehandlung",farbe:"#e87a7a",items:[
+["tryCatch(expr, error=fn, warning=fn)","Fehler & Warnungen abfangen"],
+["try(fn(), silent=TRUE)","Fehler ignorieren"],
+["tryCatch(fn(), error=function(e) NA)","Fehler → NA zurückgeben"],
+["possibly(fn, NA)","purrr: fehlerresistente Funktion"],
+["safely(fn)","purrr: gibt list(result, error) zurück"],
+]},
+]},
+
+ggplot:{title:"ggplot2 — Publikationsreife Grafiken",sub:"Grammar of Graphics — Schicht für Schicht aufbauen",
+tip:"<strong>Grundprinzip:</strong> <code>ggplot(daten, aes(x, y))</code> + <code>geom_*()</code> + <code>theme_*()</code> + <code>labs()</code>",
+gruppen:[
+{name:"Vollständiges Beispiel",farbe:"#e87a7a",
+beispiel:`library(ggplot2)
+
+p <- ggplot(df, aes(x=stammwuerze, y=alkohol, color=sorte)) +
+  geom_point(size=2.5, alpha=0.7) +
+  geom_smooth(method="lm", se=TRUE, linewidth=0.8) +
+  scale_color_brewer(palette="Set1") +
+  theme_classic(base_size=12) +
+  theme(
+    legend.position = "bottom",
+    panel.grid.major = element_line(color="grey92")
+  ) +
+  labs(
+    title    = "Stammwürze und Alkoholgehalt",
+    subtitle = "n = 200 Produktionschargen",
+    x        = "Stammwürze (°P)",
+    y        = "Alkohol (% vol)",
+    color    = "Biersorte",
+    caption  = "Quelle: Datensatz 2024"
+  )
+
+# Speichern für Publikation:
+ggsave("abb1.pdf", p, width=16, height=10, units="cm", dpi=300)
+ggsave("abb1.png", p, width=16, height=10, units="cm", dpi=300)`,
+items:[]},
+{name:"Geom-Typen",farbe:"#f0a050",items:[
+["geom_point()","Punkte → Scatterplot"],
+["geom_line()","Linie → Zeitreihe"],
+["geom_smooth(method='lm')","Regressionsgerade + KI-Band"],
+["geom_smooth(method='loess')","Geglättete Kurve"],
+["geom_bar(stat='count')","Balken → Häufigkeiten"],
+["geom_col()","Balken → Werte direkt"],
+["geom_histogram(bins=30)","Histogramm"],
+["geom_density()","Dichtekurve"],
+["geom_boxplot()","Boxplot"],
+["geom_violin()","Violin-Plot"],
+["geom_errorbar(aes(ymin,ymax))","Fehlerbalken"],
+["geom_ribbon(aes(ymin,ymax))","Konfidenzband"],
+["geom_hline(yintercept=5)","Horizontale Referenzlinie"],
+["geom_tile(aes(fill=wert))","Heatmap"],
+["geom_jitter(width=0.2)","Punkte versetzt (verhindert Überlagerung)"],
+["geom_text(aes(label=name))","Beschriftungen"],
+]},
+{name:"Scales",farbe:"#5bc4a0",items:[
+["scale_color_brewer(palette='Set1')","Kategoriale Farben"],
+["scale_fill_viridis_c()","Kontinuierlich (farbenblindensicher!)"],
+["scale_color_manual(values=c(...))","Farben manuell"],
+["scale_x_log10()","Logarithmische Achse"],
+["scale_x_continuous(limits=c(0,20))","Achsengrenzen"],
+["scale_x_continuous(breaks=seq(0,20,5))","Achsenbeschriftung"],
+["scale_x_date(date_labels='%b %Y')","Datumsachse"],
+]},
+{name:"Themes & Layout",farbe:"#a87fc4",items:[
+["theme_classic()","⭐ Empfohlen für Publikationen!"],
+["theme_minimal()","Minimalistisch"],
+["theme_bw()","Schwarz-Weiß mit Raster"],
+["theme(legend.position='bottom')","Legende unten"],
+["theme(legend.position='none')","Legende ausblenden"],
+["theme(text=element_text(size=12))","Schriftgröße"],
+["facet_wrap(~gruppe)","Separate Plots je Gruppe"],
+["facet_wrap(~gruppe, scales='free')","Eigene Achsen je Panel"],
+["facet_grid(zeile~spalte)","2D-Raster"],
+["coord_flip()","Achsen tauschen"],
+]},
+{name:"Speichern & Kombinieren",farbe:"#c9a84c",items:[
+["ggsave('abb.pdf', width=16, height=10, units='cm')","PDF — Vektorgrafik für Journals!"],
+["ggsave('abb.png', dpi=300)","PNG — 300 DPI für Druck"],
+["ggsave('abb.tiff', dpi=600)","TIFF — manche Journals verlangen das"],
+["library(patchwork); p1 + p2","Plots nebeneinander"],
+["p1 / p2","Plots übereinander"],
+["(p1 + p2) / p3","Kombiniertes Layout"],
+["cowplot::plot_grid(p1,p2, labels='AUTO')","Mit automatischen Bezeichnungen"],
+]},
+]},
+
+tests:{title:"Statistische Tests",sub:"Voraussetzungen → Test wählen → Durchführen → Interpretieren",
+tip:"<strong>Fahrplan:</strong>  1) H₀ und H₁ formulieren  ·  2) shapiro.test  ·  3) leveneTest  ·  4) Test wählen  ·  5) p-Wert und Effektgröße berichten",
+gruppen:[
+{name:"Voraussetzungen prüfen",farbe:"#7ab87a",items:[
+["shapiro.test(x)","Shapiro-Wilk — p &gt; 0.05 → normalverteilt ✓"],
+["qqnorm(x); qqline(x, col='red')","QQ-Plot — Punkte auf Linie → OK ✓"],
+["library(car); leveneTest(y~gruppe)","Levene — p &gt; 0.05 → gleiche Varianzen ✓"],
+["bartlett.test(y~gruppe)","Bartlett (nur bei Normalverteilung)"],
+["library(moments); skewness(x)","Schiefe — |Wert| &lt; 2 = akzeptabel"],
+]},
+{name:"t-Test (parametrisch)",farbe:"#5ba8d4",items:[
+["t.test(x, mu=12)","1-Stichproben: Vergleich mit Sollwert"],
+["t.test(x, y)","2-Stichproben (Welch — Standard!)"],
+["t.test(x, y, var.equal=TRUE)","2-Stichproben (gleiche Varianzen)"],
+["t.test(x, y, paired=TRUE)","Gepaarter Test (Vorher/Nachher)"],
+["t.test(x, alternative='greater')","Einseitiger Test"],
+["t.test(x, conf.level=0.99)","99%-Konfidenzintervall"],
+]},
+{name:"Nicht-parametrische Tests",farbe:"#d4835b",items:[
+["wilcox.test(x, mu=12)","Wilcoxon-Einstichproben"],
+["wilcox.test(x, y)","Mann-Whitney-U (zwei Gruppen)"],
+["wilcox.test(x, y, paired=TRUE)","Wilcoxon-Vorzeichen-Rang (gepaart)"],
+["kruskal.test(y ~ gruppe)","Kruskal-Wallis (k Gruppen)"],
+["library(dunn.test); dunn.test(x,g)","Post-hoc nach Kruskal-Wallis"],
+]},
+{name:"ANOVA",farbe:"#c9a84c",
+beispiel:`modell <- aov(score ~ sorte, data=df)
+summary(modell)           # F-Wert + p-Wert
+
+# Post-hoc (wenn p < 0.05):
+TukeyHSD(modell)
+
+# Effektgröße:
+library(effectsize)
+eta_squared(modell)       # η²
+
+# Zweifaktoriell mit Interaktion:
+modell2 <- aov(score ~ sorte * hefe, data=df)
+summary(modell2)`,
+items:[
+["aov(y ~ gruppe, data=df)","Einfaktorielle ANOVA"],
+["summary(modell)","F-Wert, df, p-Wert"],
+["TukeyHSD(modell)","Post-hoc: welche Paare unterscheiden sich?"],
+["aov(y ~ A * B, data=df)","Zweifaktoriell (mit Interaktion A×B)"],
+["aov(y ~ A + Error(id/A))","Messwiederholungs-ANOVA"],
+["oneway.test(y ~ gruppe)","Welch-ANOVA (ungleiche Varianzen)"],
+["library(emmeans); emmeans(m, ~gruppe)","Moderne Post-hoc-Analyse"],
+]},
+{name:"Kategoriale Daten",farbe:"#e87a7a",items:[
+["chisq.test(table(x, y))","Chi²-Unabhängigkeitstest"],
+["chisq.test(x, p=c(0.5,0.5))","Chi²-Anpassungstest"],
+["fisher.test(table(x, y))","Fischer-Test (bei n &lt; 5 je Zelle)"],
+["mcnemar.test(table(x, y))","McNemar (gepaarte Kategorien)"],
+]},
+{name:"Effektgrößen & Power",farbe:"#a87fc4",items:[
+["p &lt; 0.05 → *","Signifikant — H₀ ablehnen"],
+["p &lt; 0.01 → **","Sehr signifikant"],
+["p &lt; 0.001 → ***","Hochsignifikant"],
+["Cohen's d &lt; 0.2","Kleiner Effekt"],
+["Cohen's d ≈ 0.5","Mittlerer Effekt"],
+["Cohen's d &gt; 0.8","Großer Effekt"],
+["η² &gt; 0.14","Großer Effekt (ANOVA)"],
+["library(effectsize); cohens_d(x,y)","Cohen's d berechnen"],
+["library(pwr); pwr.t.test(d, sig.level=0.05, power=0.8)","Stichprobenplanung"],
+]},
+]},
+
+modelle:{title:"Regressionsmodelle",sub:"Lineare, logistische, gemischte Modelle",
+tip:"<strong>Fahrplan:</strong>  1) Scatterplot  ·  2) lm() fitten  ·  3) summary()  ·  4) plot(modell) — Diagnose  ·  5) Effektgrößen berichten",
+gruppen:[
+{name:"Lineare Regression",farbe:"#d4a05b",
+beispiel:`modell <- lm(alkohol ~ stammwuerze, data=df)
+summary(modell)
+# → Koeffizienten, R², F, p-Werte
+
+# Diagnose (IMMER!):
+par(mfrow=c(2,2)); plot(modell)
+# Plot 1: Residuals vs Fitted  → keine Muster?
+# Plot 2: QQ-Plot Residuen     → normalverteilt?
+# Plot 3: Scale-Location       → konstante Varianz?
+# Plot 4: Cook's Distance      → einflussreiche Punkte?
+
+# Multiple Regression:
+modell_m <- lm(qualitaet ~ stammwuerze + gaertemp + ph, data=df)
+AIC(modell, modell_m)   # kleiner = besser`,
+items:[
+["lm(y ~ x, data=df)","Einfache Regression"],
+["lm(y ~ x1 + x2 + x3, data=df)","Multiple Regression"],
+["lm(y ~ x1 * x2)","Mit Interaktionseffekt"],
+["lm(y ~ x + I(x^2))","Quadratischer Term"],
+["lm(y ~ . , data=df)","Alle Spalten als Prädiktoren"],
+["summary(m)","Koeffizienten, R², F, p-Werte"],
+["confint(m)","95%-Konfidenzintervalle"],
+["fitted(m)","Vorhergesagte Werte"],
+["residuals(m)","Residuen"],
+["predict(m, newdata=df_neu)","Vorhersage für neue Daten"],
+["plot(m)","4 Diagnose-Plots"],
+["anova(m1, m2)","Modelle vergleichen (F-Test)"],
+["AIC(m) / BIC(m)","Informationskriterien"],
+["step(m, direction='both')","Schrittweise Variablenauswahl"],
+["library(car); vif(m)","VIF — Multikollinearität prüfen"],
+["vif(m) &gt; 10","VIF &gt; 10 = Problem!"],
+["library(broom); tidy(m)","Koeffizienten als Data Frame"],
+["library(broom); glance(m)","Modellgüte als Data Frame"],
+["library(broom); augment(m)","Daten + Residuen + fitted"],
+]},
+{name:"Logistische & GLM",farbe:"#7ab87a",items:[
+["glm(y ~ x, family=binomial, data=df)","Logistische Regression (y = 0/1)"],
+["glm(y ~ x, family=poisson)","Poisson-Regression (Zähldaten)"],
+["glm(y ~ x, family=Gamma(link='log'))","Gamma-Regression"],
+["exp(coef(m))","Odds Ratios"],
+["exp(confint(m))","KI der Odds Ratios"],
+["library(pROC); roc(y, fitted(m))","ROC-Kurve"],
+["library(pROC); auc(roc_obj)","AUC berechnen"],
+]},
+{name:"Gemischte Modelle (lme4)",farbe:"#5bc4a0",
+tip:"<strong>Wann?</strong> Wenn Messungen nicht unabhängig sind — z.B. Wiederholungsmessungen, mehrere Beobachtungen je Person/Brauerei.",
+beispiel:`library(lme4)
+library(lmerTest) # für p-Werte
+
+# Random Intercept:
+m <- lmer(alkohol ~ stammwuerze + (1 | brauerei), data=df)
+summary(m)
+
+# R² für gemischte Modelle:
+library(MuMIn)
+r.squaredGLMM(m)
+# Marginal R² = nur feste Effekte
+# Conditional R² = feste + zufällige Effekte`,
+items:[
+["library(lme4)","Paket laden"],
+["lmer(y ~ x + (1|gruppe), data=df)","Random Intercept"],
+["lmer(y ~ x + (x|gruppe), data=df)","Random Slope"],
+["glmer(y ~ x + (1|gruppe), family=binomial)","Gemischt logistisch"],
+["fixef(m)","Feste Effekte"],
+["ranef(m)","Zufällige Effekte"],
+["library(MuMIn); r.squaredGLMM(m)","R² (marginal + conditional)"],
+]},
+{name:"Modellbericht",farbe:"#a87fc4",items:[
+["library(performance); check_model(m)","Umfassende Diagnose (empfohlen!)"],
+["library(performance); model_performance(m)","Gütekriterien auf einen Blick"],
+["library(stargazer); stargazer(m1, m2)","Regressionstabelle (LaTeX/HTML)"],
+["library(modelsummary); modelsummary(list(m1,m2))","Moderner Modellvergleich"],
+["library(report); report(m)","⭐ Automatischer APA-Methoden-Text!"],
+]},
+]},
+
+forschung:{title:"Fortgeschrittene Methoden",sub:"PCA, Clustering, Bootstrapping, Reproduzierbarkeit",
+tip:"<strong>Reproduzierbarkeit:</strong> Immer <code>set.seed()</code> · Versionen dokumentieren mit <code>sessionInfo()</code> · Daten nie überschreiben · R Markdown/Quarto für alle Berichte",
+gruppen:[
+{name:"PCA — Hauptkomponentenanalyse",farbe:"#7abcd4",
+beispiel:`# PCA (scale.=TRUE immer bei unterschiedlichen Einheiten!)
+pca <- prcomp(df_numerisch, scale.=TRUE)
+
+summary(pca)       # Varianzaufklärung je PC
+pca$rotation       # Ladungen
+pca$x              # Scores
+
+# Scree-Plot:
+plot(pca, type="l", main="Scree-Plot")
+
+# Biplot mit ggplot2:
+library(ggfortify)
+autoplot(pca, data=df, colour='gruppe',
+         loadings=TRUE, loadings.label=TRUE)`,
+items:[
+["prcomp(df, scale.=TRUE)","PCA berechnen"],
+["summary(pca)","Varianzaufklärung"],
+["pca$rotation","Ladungsmatrix"],
+["pca$x","Scores (PC-Koordinaten)"],
+["plot(pca, type='l')","Scree-Plot"],
+["biplot(pca)","Biplot"],
+["library(ggfortify); autoplot(pca)","ggplot2-Biplot"],
+["library(factoextra); fviz_pca(pca)","Professioneller PCA-Plot"],
+["fviz_screeplot(pca)","Scree-Plot mit factoextra"],
+["fviz_contrib(pca, choice='var')","Beiträge der Variablen"],
+]},
+{name:"Clusteranalyse",farbe:"#5bc4a0",items:[
+["set.seed(42); kmeans(df, centers=3, nstart=25)","k-Means Clustering"],
+["km$cluster","Cluster-Zugehörigkeit"],
+["km$centers","Cluster-Zentren"],
+["library(factoextra); fviz_cluster(km, df)","Cluster visualisieren"],
+["fviz_nbclust(df, kmeans, method='wss')","Optimale Clusteranzahl (Elbow)"],
+["hclust(dist(df), method='ward.D2')","Hierarchisches Clustering"],
+["plot(hclust_obj)","Dendrogramm"],
+["cutree(hclust_obj, k=3)","Cluster abschneiden"],
+]},
+{name:"Bootstrapping",farbe:"#e87a7a",items:[
+["library(boot)","Paket laden"],
+["boot(data, fn, R=1000)","Bootstrap (1000 Replikationen)"],
+["boot.ci(boot_obj, type='perc')","Bootstrap-Konfidenzintervall"],
+["set.seed(42); sample(x, replace=TRUE)","Manuelles Bootstrap-Sample"],
+]},
+{name:"Reproduzierbarkeit",farbe:"#c9a84c",items:[
+["sessionInfo()","R-Version + Pakete → für Methoden-Anhang!"],
+["packageVersion('ggplot2')","Version eines Pakets"],
+["citation()","Wie R selbst zitieren"],
+["citation('ggplot2')","Wie ein Paket zitieren"],
+["toBibtex(citation('ggplot2'))","Als BibTeX-Eintrag"],
+["library(renv); renv::init()","Paketversionen einfrieren"],
+["renv::snapshot() / renv::restore()","Sichern / Wiederherstellen"],
+["library(here); here('data','datei.csv')","Robuste Dateipfade"],
+]},
+]},
+
+publikation:{title:"Publikation & Reproduzierbare Berichte",sub:"R Markdown, Quarto, Tabellen, Zitieren — für Bachelor-, Master- und Doktorarbeit",
+tip:"<strong>Gold-Standard:</strong> Alle Analysen in R Markdown oder Quarto → ein Knopfdruck erstellt Bericht + alle Abbildungen + Tabellen. Daten ändern sich? Einfach neu rendern.",
+gruppen:[
+{name:"R Markdown Grundstruktur",farbe:"#c47ab8",
+beispiel:`---
+title: "Qualitätsanalyse"
+author: "Vorname Nachname"
+date: "\`r Sys.Date()\`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+  word_document: default
+  pdf_document: default
+bibliography: literatur.bib
+---
+
+## 1. Einleitung
+Text mit **fett**, *kursiv*, Inline-Code: \`r mean(x)\`
+
+\`\`\`{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, fig.width=6)
+library(tidyverse)
+\`\`\`
+
+\`\`\`{r abb1, fig.cap="Abb. 1: Stammwürze"}
+ggplot(df, aes(x=stammwuerze)) + geom_histogram()
+\`\`\``,
+items:[
+["knitr::opts_chunk$set(echo=FALSE)","Code ausblenden"],
+["knitr::opts_chunk$set(dpi=300)","Auflösung für Abbildungen"],
+["include=FALSE","Chunk ausführen aber nicht anzeigen"],
+["eval=FALSE","Chunk anzeigen aber nicht ausführen"],
+["cache=TRUE","Chunk cachen (bei langen Berechnungen!)"],
+["rmarkdown::render('bericht.Rmd')","Manuell rendern"],
+]},
+{name:"Quarto — nächste Generation",farbe:"#7abcd4",
+beispiel:`---
+title: "Meine Analyse"
+format:
+  html:
+    toc: true
+    code-fold: true
+  pdf:
+    papersize: a4
+  docx: default
+execute:
+  echo: false
+  warning: false
+---
+
+\`\`\`{r}
+#| label: fig-stammwuerze
+#| fig-cap: "Stammwürze-Verteilung"
+ggplot(df, aes(x=stammwuerze)) + geom_histogram()
+\`\`\`
+
+Siehe @fig-stammwuerze für die Verteilung.`,
+items:[
+["quarto render bericht.qmd","Im Terminal rendern"],
+["#| echo: false","Code ausblenden"],
+["#| fig-cap: 'Abbildung 1'","Bildunterschrift"],
+["#| label: fig-mein-plot","Label für Querverweis"],
+["@fig-mein-plot","Im Text referenzieren"],
+]},
+{name:"Tabellen für Publikationen",farbe:"#5bc4a0",
+beispiel:`library(gtsummary)
+
+# Deskriptive Tabelle (Publikationsformat!):
+df |>
+  select(sorte, alkohol, stammwuerze, ph) |>
+  tbl_summary(
+    by = sorte,
+    statistic = list(all_continuous() ~ "{mean} ({sd})")
+  ) |>
+  add_p() |>
+  add_overall()`,
+items:[
+["library(knitr); kable(df, digits=2)","Einfache Tabelle"],
+["library(kableExtra)","Erweiterte Formatierung"],
+["kbl() |> kable_classic()","Für Word/PDF"],
+["library(gt); gt(df)","Modernes Tabellenpaket"],
+["library(flextable)","Für Word (beste Kompatibilität)"],
+["library(gtsummary); tbl_summary(df)","⭐ Deskriptive Tabelle (Publikationsformat!)"],
+["tbl_summary(df) |> add_p()","Mit p-Werten"],
+["library(modelsummary); modelsummary(m)","Regressionstabellen"],
+]},
+{name:"Zitieren & APA",farbe:"#d4a05b",items:[
+["[@autor2024]","Zitat in R Markdown"],
+["bibliography: literatur.bib","YAML-Header: .bib-Datei"],
+["csl: apa.csl","Zitierstil (APA, Vancouver...)"],
+["citation()","Wie R zitieren"],
+["citation('ggplot2')","Wie ein Paket zitieren"],
+["toBibtex(citation('ggplot2'))","Als BibTeX-Eintrag"],
+["library(report); report(t.test(x,y))","⭐ APA-Text für t-Test automatisch!"],
+["report(aov(y~gruppe, data=df))","APA-Text für ANOVA"],
+["report(lm(y~x, data=df))","APA-Text für Regression"],
+["library(papaja)","APA R-Markdown-Vorlage"],
+]},
+]},
+
+mathematik:{title:"Mathematik in R",sub:"Lineare Algebra · Analysis · Wahrscheinlichkeit · Numerik · Optimierung · Kombinatorik",
+tip:"R ist eine vollwertige Mathematik-Umgebung. Für symbolische Mathematik: <code>library(Deriv)</code>, <code>library(caracas)</code>. Für numerische Hochleistungsrechnung: <code>library(pracma)</code> (sehr empfohlen!).",
+gruppen:[
+{name:"Grundlegende Mathematik",farbe:"#9bd4a0",items:[
+["abs(x)","Betrag |x|"],
+["sqrt(x)","Quadratwurzel √x"],
+["x^n","Potenz: 2^10 = 1024"],
+["x^(1/3)","Kubikwurzel (n-te Wurzel allgemein: x^(1/n))"],
+["exp(x)","Exponentialfunktion eˣ"],
+["expm1(x)","exp(x)−1 — numerisch stabil für kleine x"],
+["log(x)","Natürlicher Logarithmus ln(x)"],
+["log10(x)","Dekadischer Logarithmus log₁₀(x)"],
+["log2(x)","Binärer Logarithmus ld(x)"],
+["log(x, base=b)","Logarithmus zur beliebigen Basis b"],
+["log1p(x)","log(1+x) — numerisch stabil für kleine x"],
+["round(x, digits=4)","Runden auf n Dezimalstellen"],
+["ceiling(x) / floor(x)","Aufrunden / Abrunden"],
+["trunc(x)","Nachkommastellen abschneiden (Richtung 0)"],
+["sign(x)","Vorzeichen: −1, 0 oder +1"],
+["Re(z) / Im(z)","Real- / Imaginärteil einer komplexen Zahl"],
+["Mod(z)","Betrag einer komplexen Zahl |z|"],
+["Arg(z)","Argument (Winkel) einer komplexen Zahl"],
+["Conj(z)","Konjugierte komplexe Zahl z*"],
+["(2+3i) * (1-1i)","Komplexe Arithmetik"],
+]},
+{name:"Trigonometrie",farbe:"#7ab8d4",
+tip:"R arbeitet standardmäßig im <strong>Bogenmaß (Radiant)</strong>. Umrechnung: Grad → Rad: <code>grad * pi / 180</code>",
+beispiel:`# Gradmaß → Bogenmaß
+grad_zu_rad <- function(g) g * pi / 180
+
+sin(grad_zu_rad(30))   # 0.5
+cos(grad_zu_rad(60))   # 0.5
+tan(grad_zu_rad(45))   # 1.0
+
+# Einheitskreis:
+theta <- seq(0, 2*pi, length=200)
+plot(cos(theta), sin(theta), type='l', asp=1,
+     main="Einheitskreis")`,
+items:[
+["sin(x) / cos(x) / tan(x)","Sinus, Kosinus, Tangens (Bogenmaß!)"],
+["asin(x) / acos(x) / atan(x)","Arcussinus, Arcuskosinus, Arcustangens"],
+["atan2(y, x)","Arcustangens mit Vorzeichen (−π bis +π)"],
+["sinh(x) / cosh(x) / tanh(x)","Hyperbolische Funktionen"],
+["asinh(x) / acosh(x) / atanh(x)","Inverse hyperbolische Funktionen"],
+["pi","Kreiszahl π ≈ 3.14159265358979"],
+["x * pi / 180","Grad → Bogenmaß"],
+["x * 180 / pi","Bogenmaß → Grad"],
+["sinpi(x)","sin(π·x) — exakter als sin(x*pi)"],
+["cospi(x)","cos(π·x) — exakter als cos(x*pi)"],
+]},
+{name:"Lineare Algebra — Vektoren",farbe:"#c9a84c",
+beispiel:`a <- c(1, 2, 3)
+b <- c(4, 5, 6)
+
+sum(a * b)          # Skalarprodukt: 32
+norm(a, type="2")   # Euklidische Norm: sqrt(14)
+a / norm(a,"2")     # Einheitsvektor
+
+# Kreuzprodukt (3D):
+library(pracma)
+cross(a, b)  # c(-3, 6, -3)`,
+items:[
+["c(1,2,3) + c(4,5,6)","Vektoraddition"],
+["c(1,2,3) * 3","Skalarmultiplikation"],
+["sum(a * b)","Skalarprodukt a · b"],
+["crossprod(a, b)","Skalarprodukt (Matrix-Form)"],
+["library(pracma); cross(a, b)","Kreuzprodukt a × b (3D)"],
+["norm(x, type='2')","Euklidische Norm ||x||₂"],
+["norm(x, type='1')","Manhattan-Norm ||x||₁"],
+["norm(x, type='I')","Maximumnorm ||x||∞"],
+["x / norm(x, type='2')","Einheitsvektor (normiert)"],
+["outer(a, b)","Äußeres Produkt → Matrix"],
+["dist(rbind(a,b))","Euklidischer Abstand zweier Punkte"],
+["dist(df, method='manhattan')","Manhattan-Abstand"],
+["dist(df, method='cosine')","Kosinus-Abstand (library(proxy))"],
+]},
+{name:"Lineare Algebra — Matrizen",farbe:"#d4835b",
+beispiel:`A <- matrix(c(2,1,1,3), nrow=2)
+
+A %*% A          # A²
+t(A)             # Transponierte
+det(A)           # Determinante → 5
+solve(A)         # Inverse A⁻¹
+solve(A, c(1,2)) # Gleichungssystem A·x = b lösen
+
+# Trace (Spur):
+sum(diag(A))     # 2+3 = 5`,
+items:[
+["matrix(1:9, nrow=3, ncol=3)","Matrix erstellen (spaltenweise)"],
+["matrix(1:9, nrow=3, byrow=TRUE)","Matrix zeilenweise erstellen"],
+["diag(3)","3×3 Einheitsmatrix I₃"],
+["diag(c(a,b,c))","Diagonalmatrix"],
+["diag(A)","Diagonalelemente extrahieren"],
+["A %*% B","Matrixmultiplikation A·B"],
+["t(A)","Transponierte Aᵀ"],
+["det(A)","Determinante |A|"],
+["solve(A)","Inverse A⁻¹"],
+["solve(A, b)","Lineares Gleichungssystem A·x = b"],
+["sum(diag(A))","Spur (Trace) tr(A)"],
+["A + B","Elementweise Addition"],
+["A * B","Elementweise Multiplikation (Hadamard)"],
+["crossprod(A)","AᵀA (schneller als t(A) %*% A)"],
+["tcrossprod(A)","AAᵀ"],
+["library(Matrix); rankMatrix(A)","Rang der Matrix"],
+["library(Matrix); Matrix(A, sparse=TRUE)","Sparse Matrix"],
+["nrow(A) / ncol(A)","Anzahl Zeilen / Spalten"],
+]},
+{name:"Eigenwerte & Matrixzerlegungen",farbe:"#a87fc4",
+beispiel:`A <- matrix(c(4,2,1,3), nrow=2)
+
+# Eigenwerte & -vektoren:
+ev <- eigen(A)
+ev$values    # λ₁, λ₂
+ev$vectors   # Eigenvektoren
+
+# SVD: A = U · D · Vᵀ
+s <- svd(A)
+s$d          # Singulärwerte
+s$u %*% diag(s$d) %*% t(s$v)  # Rekonstruktion
+
+# QR-Zerlegung:
+qr_dec <- qr(A)
+qr.Q(qr_dec); qr.R(qr_dec)`,
+items:[
+["eigen(A)","Eigenwerte und Eigenvektoren"],
+["eigen(A)$values","Nur Eigenwerte λ"],
+["eigen(A)$vectors","Nur Eigenvektoren"],
+["svd(A)","Singulärwertzerlegung A = UDVᵀ"],
+["svd(A)$d","Singulärwerte σᵢ"],
+["qr(A)","QR-Zerlegung"],
+["chol(A)","Cholesky-Zerlegung (A positiv definit!)"],
+["library(Matrix); lu(A)","LU-Zerlegung"],
+["kappa(A)","Konditionszahl κ(A)"],
+["library(expm); expm(A)","Matrixexponential eᴬ"],
+["library(expm); logm(A)","Matrixlogarithmus"],
+["library(expm); sqrtm(A)","Matrixwurzel A^(1/2)"],
+]},
+{name:"Analysis — Ableitungen",farbe:"#7ab87a",
+tip:"Numerische Ableitungen: <code>library(numDeriv)</code>. Symbolische Ableitungen: <code>library(Deriv)</code> oder <code>D(expression(...),'x')</code> in Basis-R.",
+beispiel:`library(numDeriv)
+
+f <- function(x) x^3 + 2*x^2 - 5*x + 1
+
+# 1. Ableitung an x=2:
+grad(f, x=2)          # f'(2) ≈ 11
+
+# 2. Ableitung (Hesse):
+hessian(f, x=2)
+
+# Symbolisch (Basis-R):
+D(expression(x^3 + 2*x^2), "x")  # 3*x^2 + 2*(2*x)
+
+# Mit Deriv-Paket:
+library(Deriv)
+Deriv(~ x^3 + 2*x^2 - 5*x, "x")`,
+items:[
+["D(expression(x^2+1), 'x')","Symbolische Ableitung (Basis-R)"],
+["library(Deriv); Deriv(~x^2, 'x')","Symbolische Ableitung (Deriv-Paket)"],
+["library(numDeriv); grad(f, x)","Numerische 1. Ableitung f'(x)"],
+["library(numDeriv); hessian(f, x)","Numerische Hesse-Matrix f''(x)"],
+["library(numDeriv); jacobian(f, x)","Jacobi-Matrix (vektorwertige f)"],
+["library(pracma); fderiv(f, x, n=1)","Numerische n-te Ableitung"],
+["library(pracma); gradient(f, x0)","Gradient ∇f(x₀)"],
+["library(caracas); der(sym_expr, x)","Symbolisch mit SymPy-Backend"],
+]},
+{name:"Analysis — Integration",farbe:"#5bc4a0",
+beispiel:`# ∫₀¹ x² dx = 1/3:
+integrate(function(x) x^2, 0, 1)
+# Wert: 0.3333, Fehler: 3.7e-15
+
+# Fläche unter Normalverteilung (95%-KI):
+integrate(dnorm, -1.96, 1.96)  # → 0.9500
+
+# Uneigentliches Integral ∫₋∞^∞:
+integrate(function(x) exp(-x^2), -Inf, Inf)
+# → sqrt(pi) ≈ 1.7724
+
+# 2D-Integral:
+library(cubature)
+f2d <- function(x) x[1]^2 + x[2]^2
+adaptIntegrate(f2d, c(0,0), c(1,1))`,
+items:[
+["integrate(f, lower=a, upper=b)","Bestimmtes Integral ∫ₐᵇ f(x)dx"],
+["integrate(f, lower=0, upper=1)$value","Nur den Zahlenwert"],
+["integrate(f, lower=-Inf, upper=Inf)","Uneigentliches Integral"],
+["library(cubature); adaptIntegrate(f, lo, hi)","Mehrdimensionales Integral"],
+["library(pracma); quad(f, a, b)","Gaußsche Quadratur"],
+["library(pracma); integral2(f, a,b, c,d)","2D-Integral ∫∫ f(x,y)dxdy"],
+["library(pracma); trapz(x, y)","Trapezregel (diskrete Daten)"],
+["library(pracma); cumtrapz(x, y)","Kumulatives Integral (Stammfunktion numerisch)"],
+]},
+{name:"Grenzwerte & Folgen",farbe:"#e87a7a",
+beispiel:`# Konvergenz einer Folge beobachten:
+n <- 1:100
+folge <- (1 + 1/n)^n   # Gegen e konvergierend
+
+plot(n, folge, type='l',
+     main="(1 + 1/n)^n → e",
+     abline(h=exp(1), col='red', lty=2))
+
+# Partialsummen (Reihe):
+partialsummen <- cumsum(1 / (1:100)^2)  # → π²/6
+tail(partialsummen, 1)   # ≈ 1.6350`,
+items:[
+["cumsum(1/(1:n)^2)","Partialsummen einer Reihe"],
+["cumprod(x)","Kumulatives Produkt"],
+["Reduce('+', list, accumulate=TRUE)","Partialsummen einer Liste"],
+["library(pracma); lim_point(f, x0)","Grenzwert numerisch"],
+["library(caracas); lim(expr, x, val)","Grenzwert symbolisch"],
+["diff(x)","Vorwärtsdifferenz (diskrete Ableitung)"],
+["diff(x, differences=2)","2. Differenz"],
+["library(zoo); rollmean(x, k=5)","Gleitender Mittelwert"],
+]},
+{name:"Numerische Methoden",farbe:"#c9a84c",
+beispiel:`# Nullstellen finden:
+f <- function(x) x^3 - 2*x - 5
+uniroot(f, lower=1, upper=3)  # x ≈ 2.0946
+
+# Mehrere Nullstellen:
+library(rootSolve)
+uniroot.all(f, lower=-10, upper=10)
+
+# Nicht-lineares Gleichungssystem:
+system <- function(x) c(x[1]+x[2]-3,
+                         x[1]^2-x[2]-1)
+multiroot(system, start=c(1,1))`,
+items:[
+["uniroot(f, lower=a, upper=b)","Nullstelle im Intervall suchen"],
+["library(rootSolve); uniroot.all(f, lo, hi)","Alle Nullstellen im Intervall"],
+["library(rootSolve); multiroot(f, start)","Nichtlineares Gleichungssystem"],
+["polyroot(c(a0, a1, a2, ...))","Nullstellen eines Polynoms"],
+["library(pracma); newtonraphson(f, x0)","Newton-Raphson-Verfahren"],
+["library(pracma); bisect(f, a, b)","Bisektionsverfahren"],
+["library(pracma); secant(f, a, b)","Sekanten-Verfahren"],
+["library(pracma); ridders(f, a, b)","Ridders-Verfahren (robust)"],
+]},
+{name:"Optimierung",farbe:"#5ba8d4",
+beispiel:`# 1D-Minimum:
+f <- function(x) (x-3)^2 + 2
+optimize(f, lower=0, upper=10)
+# minimum: 3, objective: 2
+
+# Mehrdimensional (Nelder-Mead):
+g <- function(p) (p[1]-1)^2 + (p[2]-2)^2
+result <- optim(c(0,0), g)
+result$par   # c(1, 2)
+
+# Mit Gradient (BFGS):
+optim(c(0,0), g, method='BFGS')`,
+items:[
+["optimize(f, lower=a, upper=b)","Minimum/Maximum einer 1D-Funktion"],
+["optimize(f, lower, upper, maximum=TRUE)","Maximum suchen"],
+["optim(par, fn)","Mehrdimensionale Optimierung (Nelder-Mead)"],
+["optim(par, fn, method='BFGS')","BFGS-Verfahren (Gradient-basiert, schnell)"],
+["optim(par, fn, gr=grad_fn)","Mit analytischem Gradienten"],
+["optim(..., lower, upper, method='L-BFGS-B')","Mit Box-Constraints"],
+["nlm(f, p)","Nicht-lineares Minimum"],
+["library(lpSolve); lp(...)","Lineares Programm (LP)"],
+["library(quadprog); solve.QP(...)","Quadratisches Programm (QP)"],
+["library(nloptr); nloptr(...)","Allgemeine nichtlineare Optimierung mit Constraints"],
+["library(DEoptim)","Differential Evolution — globale Optimierung"],
+["library(GenSA)","Simulated Annealing — globale Optimierung"],
+]},
+{name:"Wahrscheinlichkeitsrechnung",farbe:"#d4a05b",
+beispiel:`# Kombinatorik:
+choose(10, 3)        # C(10,3) = 120
+factorial(5)         # 5! = 120
+
+# P(X = 3) bei B(10, 0.4):
+dbinom(3, size=10, prob=0.4)  # → 0.2150
+
+# P(X >= 3):
+1 - pbinom(2, size=10, prob=0.4)
+
+# Poisson: P(X=5) mit λ=3:
+dpois(5, lambda=3)   # → 0.1008
+
+# P(-1.96 < Z < 1.96):
+pnorm(1.96) - pnorm(-1.96)  # → 0.95`,
+items:[
+["choose(n, k)","Binomialkoeffizient C(n,k)"],
+["factorial(n)","Fakultät n!"],
+["choose(n,k) * p^k * (1-p)^(n-k)","Binomialwahrscheinlichkeit manuell"],
+["dbinom(k, n, p)","P(X=k) Binomialverteilung B(n,p)"],
+["pbinom(k, n, p)","P(X≤k) kumuliert"],
+["1-pbinom(k-1, n, p)","P(X≥k)"],
+["dpois(k, lambda)","P(X=k) Poisson(λ)"],
+["ppois(k, lambda)","P(X≤k) Poisson kumuliert"],
+["pnorm(b) - pnorm(a)","P(a &lt; X &lt; b) Normalverteilung"],
+["qnorm(0.975)","z-Wert für 97.5%-Quantil ≈ 1.96"],
+["qnorm(c(0.025,0.975))","Beide Grenzen für 95%-Bereich"],
+]},
+{name:"Zahlentheorie & Kombinatorik",farbe:"#c47ab8",
+beispiel:`library(numbers)
+library(combinat)
+
+isPrime(17)            # TRUE
+Primes(50)             # 2 3 5 7 11 13...
+GCD(48, 18)            # 6
+LCM(4, 6)              # 12
+primeFactors(360)      # 2 2 2 3 3 5
+
+# Alle Permutationen von {1,2,3}:
+permn(3)               # 6 Listen
+
+# Alle 3er-Kombinationen aus 1:5:
+combn(5, 3)            # 10 Spalten`,
+items:[
+["library(numbers); isPrime(n)","Ist n eine Primzahl?"],
+["library(numbers); Primes(n)","Alle Primzahlen ≤ n"],
+["library(numbers); GCD(a, b)","Größter gemeinsamer Teiler ggT"],
+["library(numbers); LCM(a, b)","Kleinstes gemeinsames Vielfaches kgV"],
+["library(numbers); primeFactors(n)","Primfaktorzerlegung"],
+["library(numbers); extGCD(a,b)","Erweiterter euklidischer Algorithmus"],
+["combn(n, k)","Alle k-elementigen Kombinationen aus 1:n"],
+["library(combinat); permn(n)","Alle Permutationen von 1:n"],
+["library(combinat); combn(x, m)","Kombinationen als Liste"],
+["prod(n:(n-k+1)) / factorial(k)","Variationen V(n,k) = n!/(n-k)!"],
+["library(gtools); combinations(n,k)","Kombinationen (mit/ohne Wiederholung)"],
+["library(gtools); permutations(n,k)","Permutationen (mit/ohne Wiederholung)"],
+]},
+{name:"Fourieranalyse",farbe:"#9bd4a0",
+beispiel:`set.seed(1)
+t <- seq(0, 1, length=128)
+signal <- sin(2*pi*5*t) +   # 5 Hz
+          sin(2*pi*20*t) +  # 20 Hz
+          rnorm(128, sd=0.3)
+
+# FFT:
+ft   <- fft(signal)
+n    <- length(signal)
+freq <- (0:(n/2)) / n * 128
+amp  <- Mod(ft[1:(n/2+1)])
+
+plot(freq, amp, type='l',
+     main='Amplitudenspektrum',
+     xlab='Frequenz (Hz)', ylab='Amplitude')`,
+items:[
+["fft(x)","Schnelle Fourier-Transformation (FFT)"],
+["fft(x, inverse=TRUE)","Inverse FFT"],
+["Mod(fft(x))","Amplitudenspektrum"],
+["Arg(fft(x))","Phasenspektrum"],
+["Re(fft(x,inverse=TRUE))/length(x)","Rücktransformation (real)"],
+["library(signal); butter(n, Wn)","Butterworth-Tiefpassfilter"],
+["library(signal); filtfilt(b, a, x)","Nullphasiger Filter"],
+["library(signal); specgram(x, Fs=128)","Spektrogramm"],
+["library(pracma); dct(x)","Diskrete Cosinus-Transformation (DCT)"],
+]},
+{name:"Differentialgleichungen (ODEs)",farbe:"#7abcd4",
+tip:"<code>library(deSolve)</code> ist das Standard-Paket für Differential-gleichungen in R — sehr gut dokumentiert.",
+beispiel:`library(deSolve)
+
+# Logistisches Wachstum: dx/dt = r·x·(1 - x/K)
+logistisch <- function(t, state, parms) {
+  with(as.list(c(state, parms)), {
+    dx <- r * x * (1 - x/K)
+    list(c(dx))
+  })
+}
+parms <- c(r=0.3, K=100)
+state <- c(x=5)           # Anfangsbedingung
+times <- seq(0, 50, 0.1)
+out   <- ode(state, times, logistisch, parms)
+plot(out, main="Logistisches Wachstum")`,
+items:[
+["library(deSolve)","Standard-Paket für DGLs"],
+["ode(y, times, func, parms)","ODE lösen (Standard: LSODA)"],
+["ode(..., method='rk4')","Runge-Kutta 4. Ordnung"],
+["ode(..., method='euler')","Euler-Verfahren"],
+["dede(y, times, func, parms)","ODE mit Verzögerung (Delay-ODE)"],
+["library(pracma); ode45(f, t, y0)","Matlab-ähnliches Interface"],
+["library(deSolve); ode.2D(...)","2D-Partielle DGL"],
+]},
+{name:"Symbolische Mathematik",farbe:"#e87a7a",
+tip:"<code>library(caracas)</code> benötigt Python + SymPy (einmalige Einrichtung). <code>library(Ryacas)</code> ist eine reine R-Alternative.",
+beispiel:`library(caracas)
+
+x <- sym("x")
+
+# Ableitung:
+der(x^3 + 2*x^2 - x, x)   # 3x² + 4x - 1
+
+# Stammfunktion:
+int(x^2, x)                # x³/3
+
+# Grenzwert:
+lim(sin(x)/x, x, 0)        # 1
+
+# Taylorentwicklung bis Grad 4:
+taylor(exp(x), x, 0, 4)    # 1 + x + x²/2 + x³/6 + x⁴/24
+
+# Vereinfachen:
+simplify((x^2-1)/(x-1))    # x + 1`,
+items:[
+["library(caracas)","Symbolische Mathematik (SymPy-Backend)"],
+["sym('x')","Symbolische Variable"],
+["der(expr, x)","Ableitung d/dx"],
+["der(expr, x, 2)","2. Ableitung d²/dx²"],
+["int(expr, x)","Stammfunktion ∫ expr dx"],
+["int(expr, x, a, b)","Bestimmtes Integral"],
+["lim(expr, x, wert)","Grenzwert lim(x→wert) expr"],
+["taylor(expr, x, x0, n)","Taylor-Entwicklung um x₀ bis Grad n"],
+["simplify(expr)","Ausdruck vereinfachen"],
+["expand(expr)","Ausdruck ausmultiplizieren"],
+["factor_expr(expr)","Faktorisieren"],
+["solve_sys(c(eq1,eq2), c(x,y))","Gleichungssystem symbolisch lösen"],
+["library(Ryacas); yac('Factor(x^2-1)')","Ryacas (kein Python nötig)"],
+]},
+],},
+shortcuts:{title:"RStudio Shortcuts & Workflow",sub:"Tastaturkürzel, Pakete, Fehlerdiagnose",
+gruppen:[
+{name:"Täglich — auswendig lernen!",farbe:"#f0a050",items:[
+["Alt + −","⭐ &lt;- (Zuweisungspfeil) — wichtigster Shortcut!"],
+["Strg + Enter","Aktuelle Zeile / Auswahl ausführen"],
+["Strg + Shift + M","%&gt;% oder |&gt; (Pipe)"],
+["Tab","Autocomplete — immer nutzen!"],
+["↑ in der Console","Letzten Befehl wiederholen"],
+["Strg + L","Console leeren"],
+["Esc","Befehl abbrechen"],
+["Strg + Z / Strg + Y","Rückgängig / Wiederherstellen"],
+["Strg + S","Script speichern"],
+["Strg + Shift + N","Neues R-Script"],
+]},
+{name:"Code & Editor",farbe:"#5bc4a0",items:[
+["Strg + Shift + C","Zeile(n) auskommentieren / wieder einkommentieren"],
+["Strg + F","Suchen & Ersetzen"],
+["Strg + Shift + F","Projektweite Suche"],
+["Strg + A → Strg + Enter","Gesamtes Script ausführen"],
+["Strg + Shift + A","Code automatisch formatieren"],
+["Alt + Shift + K","⭐ Alle Shortcuts anzeigen!"],
+["Strg + 1 / Strg + 2","Fokus: Script / Console"],
+["F1 auf Funktion","Direkte Hilfe öffnen"],
+]},
+{name:"Pakete & Hilfe",farbe:"#5ba8d4",items:[
+["install.packages('paket')","Einmalig installieren"],
+["library(paket)","Jede Session laden!"],
+["update.packages()","Alle aktualisieren"],
+["?mean","Hilfe zu einer Funktion"],
+["??regression","Hilfe-Suche nach Begriff"],
+["vignette('dplyr')","Paket-Einführung"],
+["citation('ggplot2')","Paket korrekt zitieren"],
+]},
+{name:"Fehlermeldungen verstehen",farbe:"#e87a7a",items:[
+["Error: object 'x' not found","Variable nicht definiert → Schreibfehler? Ausgeführt?"],
+["Error: could not find function","Paket nicht geladen → library() vergessen?"],
+["Error: subscript out of bounds","Index zu groß → length() prüfen"],
+["Warning: NAs introduced by coercion","as.numeric() auf Text → NA entsteht"],
+["+ in der Console","Ausdruck unvollständig → Klammer fehlt? → Esc!"],
+["Warning ≠ Error","Warnungen oft okay · Errors müssen behoben werden"],
+["traceback()","Nach Fehler: Aufrufreihenfolge anzeigen"],
+]},
+{name:"Empfohlene Pakete — vollständige Liste",farbe:"#c9a84c",items:[
+["tidyverse","Daten-Ökosystem: ggplot2, dplyr, tidyr, purrr, ..."],
+["readxl / haven","Excel, SPSS, SAS einlesen"],
+["janitor","Datenbereinigung, Spaltennamen säubern"],
+["skimr","Schnelle Datenübersicht (besser als summary!)"],
+["car","Levene-Test, VIF, ANOVA-Erweiterungen"],
+["effectsize","Cohen's d, η², r"],
+["pwr","Power-Analyse & Stichprobenplanung"],
+["emmeans","Moderne Post-hoc-Analyse"],
+["lme4 + lmerTest","Gemischte Modelle"],
+["broom","Modell-Output als Data Frame"],
+["report","⭐ APA-Text automatisch!"],
+["performance","Modelldiagnostik"],
+["ggfortify","PCA/Zeitreihen mit ggplot2"],
+["factoextra","PCA & Clustering visualisieren"],
+["patchwork","Plots kombinieren"],
+["ggpubr","Publikationsreife ggplot2-Extras"],
+["kableExtra / gt / flextable","Tabellen für HTML/PDF/Word"],
+["gtsummary","⭐ Deskriptive Tabellen (Publikationsformat)"],
+["modelsummary","Regressionstabellen"],
+["papaja","APA R-Markdown-Vorlage"],
+["renv","Reproduzierbare Paketversionen"],
+["here","Robuste Dateipfade"],
+["quarto","Modernes R Markdown"],
+]},
+]},
+};
+
+let aktiv="tastatur", suche="", col={};
+
+function esc(s){
+  // already-escaped strings (HTML entities) are passed through
+  return String(s);
+}
+
+function render(){renderNav();renderMain();}
+
+function renderNav(){
+  const nav=document.getElementById("nav");
+  const sec=S.find(s=>s.id===aktiv);
+  document.getElementById("section-accent").textContent="— "+sec.label.replace(/\S+\s/,"");
+  document.getElementById("section-accent").style.color=sec.color;
+  nav.innerHTML=S.map(s=>`<button class="nav-btn${s.id===aktiv?" active":""}" style="${s.id===aktiv?`color:${s.color};border-bottom-color:${s.color}`:""}" onclick="go('${s.id}')">${s.label}${PROTECTED.includes(s.id)&&!unlocked?' 🔒':''}</button>`).join("");
+}
+
+const PROTECTED=["forschung","publikation"];
+const PIN_HASH=1509442; // PIN: 1234
+let unlocked=false;
+
+function hashPin(s){let h=0;for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}return h;}
+
+// So änderst du den PIN: öffne die Browser-Console (F12) und tippe:
+// hashPin("DEINPIN")  → die Zahl als PIN_HASH eintragen
+
+function go(id){
+  if(PROTECTED.includes(id)&&!unlocked){
+    const pin=prompt("🔒 Dieser Bereich ist geschützt.\nPIN eingeben:");
+    if(pin===null) return;
+    if(hashPin(pin)!==PIN_HASH){
+      alert("❌ Falscher PIN.");
+      return;
+    }
+    unlocked=true;
+  }
+  aktiv=id;suche="";document.getElementById("search").value="";render();window.scrollTo({top:0});
+}
+
+document.getElementById("search").addEventListener("input",function(){suche=this.value.toLowerCase();renderMain();});
+
+function tog(k){col[k]=!col[k];renderMain();}
+
+function fi(items){
+  if(!suche)return items;
+  return items.filter(it=>(it[0]||"").toLowerCase().includes(suche)||(it[it.length-1]||"").toLowerCase().includes(suche));
+}
+
+function hl(s){
+  return s.split("\n").map(line=>{
+    const ci=line.indexOf("#");
+    if(ci>-1) return line.substring(0,ci)+'<span class="c">'+line.substring(ci)+'</span>';
+    return line;
+  }).join("\n");
+}
+
+function renderMain(){
+  const sec=D[aktiv], sm=S.find(s=>s.id===aktiv);
+  let h=`<div class="section-header"><h2 class="section-title" style="color:${sm.color}">${sec.title}</h2><p class="section-sub">${sec.sub}</p></div>`;
+  if(sec.tip) h+=`<div class="tip">${sec.tip}</div>`;
+  let any=false;
+  sec.gruppen.forEach((g,gi)=>{
+    const k=`${aktiv}-${gi}`, open=col[k]!==true;
+    const items=fi(g.items||[]);
+    if(suche&&items.length===0&&!g.beispiel) return;
+    any=true;
+    const c=g.farbe||sm.color;
+    h+=`<div class="group"><button class="group-header" onclick="tog('${k}')"><span class="group-name" style="color:${c}">${g.name}</span><span class="group-meta"><span class="group-count">${items.length}</span><span class="group-arrow${open?" open":""}">▼</span></span></button>`;
+    if(open){
+      h+=`<div class="group-body">`;
+      if(g.tip) h+=`<div class="tip" style="margin:0">${g.tip}</div>`;
+      items.forEach(it=>{
+        if(it.length===3){
+          h+=`<div class="row row3"><div class="row-code" style="color:${c}">${it[0]}</div><div class="row-mid">${it[1]}</div><div class="row-desc">${it[2]}</div></div>`;
+        } else {
+          h+=`<div class="row"><div class="row-code" style="color:${c}">${it[0]}</div><div class="row-desc">${it[1]}</div></div>`;
+        }
+      });
+      if(g.beispiel) h+=`<div class="example-block"><div class="example-label">Beispiel</div><pre>${hl(g.beispiel)}</pre></div>`;
+      h+=`</div>`;
+    }
+    h+=`</div>`;
+  });
+  if(!any) h+=`<div class="empty">Keine Ergebnisse für „${suche}"</div>`;
+  document.getElementById("main").innerHTML=h;
+}
+
+render();
+</script>
+</body>
+</html>
